@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Persona Management | Mini Sprintbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "background": "#faf9f5",
+                  "surface-container-highest": "#e3e2df",
+                  "error": "#ba1a1a",
+                  "surface-container": "#efeeea",
+                  "surface-dim": "#dbdad6",
+                  "surface-container-low": "#f5f4f0",
+                  "on-secondary-container": "#4c4a84",
+                  "secondary-container": "#c0bdff",
+                  "outline": "#777586",
+                  "surface": "#faf9f5",
+                  "on-tertiary": "#ffffff",
+                  "outline-variant": "#c7c4d7",
+                  "on-surface-variant": "#464554",
+                  "error-container": "#ffdad6",
+                  "on-primary-fixed": "#100069",
+                  "secondary-fixed-dim": "#c3c0ff",
+                  "on-primary-container": "#c1beff",
+                  "tertiary-container": "#8f3400",
+                  "inverse-on-surface": "#f2f1ed",
+                  "surface-variant": "#e3e2df",
+                  "on-tertiary-container": "#ffb393",
+                  "on-secondary-fixed-variant": "#42407a",
+                  "on-secondary-fixed": "#16124c",
+                  "on-secondary": "#ffffff",
+                  "tertiary-fixed-dim": "#ffb597",
+                  "tertiary": "#692400",
+                  "surface-tint": "#5148d7",
+                  "surface-container-high": "#e9e8e4",
+                  "on-background": "#1b1c1a",
+                  "secondary": "#5a5893",
+                  "surface-container-lowest": "#ffffff",
+                  "primary-fixed": "#e3dfff",
+                  "primary": "#2a14b4",
+                  "secondary-fixed": "#e3dfff",
+                  "on-primary-fixed-variant": "#372abf",
+                  "primary-fixed-dim": "#c3c0ff",
+                  "on-surface": "#1b1c1a",
+                  "tertiary-fixed": "#ffdbcd",
+                  "surface-bright": "#faf9f5",
+                  "on-primary": "#ffffff",
+                  "on-tertiary-fixed": "#360f00",
+                  "inverse-surface": "#30312e",
+                  "on-tertiary-fixed-variant": "#7d2d00",
+                  "inverse-primary": "#c3c0ff",
+                  "primary-container": "#4338ca",
+                  "on-error": "#ffffff",
+                  "on-error-container": "#93000a"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "1rem",
+                  "xl": "1.25rem",
+                  "full": "9999px"
+          },
+          "fontFamily": {
+                  "headline": ["Plus Jakarta Sans"],
+                  "body": ["Inter"],
+                  "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .persona-card:hover .edit-overlay {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="bg-background font-body text-on-surface antialiased overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-[#faf9f5]/80 dark:bg-stone-900/80 backdrop-blur-xl flex justify-between items-center px-8 h-16 w-full font-['Plus_Jakarta_Sans'] antialiased">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tight text-[#1b1c1a] dark:text-[#faf9f5]">Mini Sprintbox</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-[#f5f4f0] dark:hover:bg-stone-800 p-2 rounded-full transition-colors active:scale-95 duration-200" data-icon="help">help</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-[#f5f4f0] dark:hover:bg-stone-800 p-2 rounded-full transition-colors active:scale-95 duration-200" data-icon="settings">settings</button>
+<div class="h-8 w-px bg-surface-container-highest"></div>
+<button class="bg-primary-container text-on-primary text-sm font-semibold py-2 px-5 rounded-full hover:shadow-lg transition-all active:scale-95">Export</button>
+<img alt="User profile" class="w-9 h-9 rounded-full border-2 border-surface-container-high" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEwxlGH-4H-8_xDs6W9O1pyCTsOLn6rZCLjDsMMeSvDUbGY-nej7qb6urp8DMcro6wIbkcCkIhUahVYof_oa1roMDJIBAIbdjcQCl7bJUIs8E1Dop7jsKp_fycBybG_hfULIqzDMhn8jNrsIIfKoMhHVYEyQmOxNtk00g7Pt735RYGA3RREaR34Ak06dBwLHKO2BjZ7oWaOA-MOwSF46_okZh0R6kjoggcBsdNb8r3vfOwhfPHr4G4L0INwPl74jpxFYWZFI51EI8"/>
+</div>
+</header>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-64 z-40 bg-[#f5f4f0] dark:bg-stone-900 flex flex-col py-8 pr-4 h-full font-['Plus_Jakarta_Sans'] text-sm font-medium">
+<div class="px-8 mb-12">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+</div>
+<div>
+<h2 class="text-lg font-extrabold text-[#1b1c1a] dark:text-white leading-tight">Mini Sprintbox</h2>
+<p class="text-xs text-on-surface-variant">Active Workshop</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-8 py-3 text-[#1b1c1a]/70 dark:text-[#faf9f5]/70 hover:text-[#4338CA] dark:hover:text-[#5148d7] transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+        Dashboard
+      </a>
+<a class="flex items-center gap-4 px-8 py-3 bg-white dark:bg-stone-800 text-[#4338CA] rounded-r-full shadow-sm" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+        Personas
+      </a>
+<a class="flex items-center gap-4 px-8 py-3 text-[#1b1c1a]/70 dark:text-[#faf9f5]/70 hover:text-[#4338CA] dark:hover:text-[#5148d7] transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="record_voice_over">record_voice_over</span>
+        Pre-Interview
+      </a>
+<a class="flex items-center gap-4 px-8 py-3 text-[#1b1c1a]/70 dark:text-[#faf9f5]/70 hover:text-[#4338CA] dark:hover:text-[#5148d7] transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+        Sprint Flow
+      </a>
+<a class="flex items-center gap-4 px-8 py-3 text-[#1b1c1a]/70 dark:text-[#faf9f5]/70 hover:text-[#4338CA] dark:hover:text-[#5148d7] transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="summarize">summarize</span>
+        Summary
+      </a>
+</nav>
+<div class="px-6 mb-8">
+<button class="w-full py-3 bg-primary-container text-white rounded-full font-bold shadow-md hover:shadow-xl transition-shadow active:scale-[0.98]">
+        New Sprint
+      </button>
+</div>
+<footer class="mt-auto border-t border-surface-container-highest pt-4">
+<a class="flex items-center gap-4 px-8 py-2 text-[#1b1c1a]/70 dark:text-[#faf9f5]/70 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+        Settings
+      </a>
+<a class="flex items-center gap-4 px-8 py-2 text-[#1b1c1a]/70 dark:text-[#faf9f5]/70 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+        Support
+      </a>
+</footer>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-12 min-h-screen bg-background">
+<!-- Header Section -->
+<header class="mb-12 max-w-7xl mx-auto flex justify-between items-end">
+<div class="space-y-2">
+<span class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-primary font-label">Workshop Module 02</span>
+<h1 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight">Personas</h1>
+<p class="text-on-surface-variant max-w-lg font-body">Define the core archetypes of your users. These profiles represent their needs, behaviors, and pain points within the product ecosystem.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-surface-container-high text-on-surface px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-surface-container-highest transition-colors">
+          Filter Tags
+        </button>
+<button class="bg-primary text-white px-6 py-2.5 rounded-full font-semibold text-sm shadow-sm hover:shadow-md transition-all active:scale-95">
+          Generate Archetypes
+        </button>
+</div>
+</header>
+<!-- Persona Bento Grid -->
+<section class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Persona Card 1 -->
+<article class="persona-card group relative bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:scale-[1.01]">
+<div class="h-32 bg-gradient-to-br from-primary to-primary-container relative">
+<div class="absolute -bottom-10 left-8">
+<img alt="Persona portrait" class="w-20 h-20 rounded-full border-4 border-surface-container-lowest bg-white object-cover" data-alt="close-up portrait of a professional woman with glasses in a bright modern office with warm natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQfyJ9_KBd9DytvYpesnMDjTKZvlLunOEnWfQfcYMUMMHc0Wq1thDegWI8d9B_8p8pV1Td1bCNh01q9G2s2eDh1Q-mGV71FDx9jtfXQWksDtkdLWwgtlDF5TSXcsCpfAwMybsIQbuVp0I4ltL-Q7KsYQxxSUZwW02ZxdoezG10pZrnovdhweuICHIjmDcTHt-X5d6GlhFtdN-srOLpggvvuL-XC4ja3GjkxBooVDzxI5EdHPM-kUC-dQx_ZS2RR7vFYAKKXe27_mo"/>
+</div>
+</div>
+<div class="pt-14 px-8 pb-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Elena Vance</h3>
+<p class="text-sm text-primary font-medium">Head of Operations</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="space-y-6 flex-1">
+<div>
+<h4 class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-on-surface-variant mb-3 font-label">Key Goals</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">Workflow Automation</span>
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">Scaling Logistics</span>
+</div>
+</div>
+<div>
+<h4 class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-on-surface-variant mb-3 font-label">Frustrations</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed italic border-l-2 border-outline-variant pl-4">"We are losing too much time in manual data entry between siloed legacy systems."</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Persona Card 2 -->
+<article class="persona-card group relative bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:scale-[1.01]">
+<div class="h-32 bg-gradient-to-br from-secondary to-on-secondary-container relative">
+<div class="absolute -bottom-10 left-8">
+<img alt="Persona portrait" class="w-20 h-20 rounded-full border-4 border-surface-container-lowest bg-white object-cover" data-alt="portrait of a creative man with a beard wearing a denim shirt in a sunlit design studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh1J4I4R4G8JbB5idzlbuRjO8MIXl7p-5niXayBSbVdXz0g-uqMWHYOQn6jZqh8d3Aliv6UzHGF2TTpk62PXKuKhKFonsLLD8A74AHEzRGUsl_mpygZI_YJeP0CIsEIJktKWVyVDXsRjd0-NeswVslBFMQ1QUAq1D2WmvEArbuyj0my6U2jfhCyPo7DkS0DWXTYJstcRTJaeooAzuyO_mVkCIqgIZhEvtAtX_bN1lxKJySVmXcBoO5H516oOJlJbi6x7eDxpHXXY0"/>
+</div>
+</div>
+<div class="pt-14 px-8 pb-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Marcus Thorne</h3>
+<p class="text-sm text-primary font-medium">Freelance Developer</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="space-y-6 flex-1">
+<div>
+<h4 class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-on-surface-variant mb-3 font-label">Key Goals</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">Clean API Integration</span>
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">Rapid Deployment</span>
+</div>
+</div>
+<div>
+<h4 class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-on-surface-variant mb-3 font-label">Frustrations</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed italic border-l-2 border-outline-variant pl-4">"Onboarding to new tools takes days when it should take minutes. Documentation is often outdated."</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Persona Card 3 -->
+<article class="persona-card group relative bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:scale-[1.01]">
+<div class="h-32 bg-gradient-to-br from-[#8f3400] to-tertiary relative">
+<div class="absolute -bottom-10 left-8">
+<img alt="Persona portrait" class="w-20 h-20 rounded-full border-4 border-surface-container-lowest bg-white object-cover" data-alt="headshot of a young energetic woman with curly hair against a vibrant colorful abstract background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJG5Bls0UhlbL7Tw9gcr50at_blffOzlCHvo-5uJSu4AH2QjZypHSfT6XLCnhKnZY_2IrckCuUE9z19AABuABmHEsVnd6fgx11tGdVGHYl4nSJHYj-CrI6xbrnpu0GXd6fDgjYK56Pse38u4JkfwFEQv3lDZLOBEmJjBYf9CFNWgRm0Gc1dVihNcvvnVsK4Wbi6XdOeLjr-vfbpW1MkDWFHvQ6w7ZWe4qFIiv4DXHSOmOH-PeO2B5H8eiviZ_kwsXlaySVoqTNNVA"/>
+</div>
+</div>
+<div class="pt-14 px-8 pb-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Sofia Chen</h3>
+<p class="text-sm text-primary font-medium">UX Research Lead</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</div>
+<div class="space-y-6 flex-1">
+<div>
+<h4 class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-on-surface-variant mb-3 font-label">Key Goals</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">Qualitative Insights</span>
+<span class="bg-secondary-container/30 text-on-secondary-container px-3 py-1 rounded-full text-xs font-semibold">User Centricity</span>
+</div>
+</div>
+<div>
+<h4 class="text-[0.6875rem] font-bold tracking-[0.05em] uppercase text-on-surface-variant mb-3 font-label">Frustrations</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed italic border-l-2 border-outline-variant pl-4">"Teams prioritize features over user needs. It's hard to make the voice of the customer heard."</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Add New Persona Empty State Card -->
+<button class="flex flex-col items-center justify-center border-2 border-dashed border-outline-variant rounded-lg p-12 bg-surface-container-low hover:bg-surface-container hover:border-primary transition-all group min-h-[440px]">
+<div class="w-16 h-16 rounded-full bg-surface-container-highest flex items-center justify-center mb-6 group-hover:bg-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-3xl text-on-surface-variant group-hover:text-primary" data-icon="person_add">person_add</span>
+</div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-2">Add New Persona</h3>
+<p class="text-sm text-on-surface-variant text-center max-w-[200px]">Create a new archetype from scratch or import from research.</p>
+</button>
+</div>
+</section>
+<!-- Tonal Layering Illustration / Data Insights Section -->
+<section class="max-w-7xl mx-auto mt-20">
+<div class="bg-surface-container-low rounded-xl p-10 flex flex-col md:flex-row gap-12 items-center">
+<div class="flex-1 space-y-4">
+<h3 class="text-2xl font-headline font-bold text-on-surface">Ecosystem Balance</h3>
+<p class="text-on-surface-variant leading-relaxed">Your current persona selection covers <strong class="text-primary">85% of your target market</strong>. Consider adding a "Skeptic" or "Non-Technical" persona to pressure-test the accessibility of your solution.</p>
+<div class="pt-4 flex gap-8">
+<div class="space-y-1">
+<div class="text-3xl font-extrabold text-primary tracking-tighter">03</div>
+<div class="text-[0.6875rem] font-bold uppercase tracking-wider text-on-surface-variant font-label">Active Personas</div>
+</div>
+<div class="space-y-1">
+<div class="text-3xl font-extrabold text-secondary tracking-tighter">12</div>
+<div class="text-[0.6875rem] font-bold uppercase tracking-wider text-on-surface-variant font-label">User Stories</div>
+</div>
+<div class="space-y-1">
+<div class="text-3xl font-extrabold text-tertiary-container tracking-tighter">08</div>
+<div class="text-[0.6875rem] font-bold uppercase tracking-wider text-on-surface-variant font-label">Pain Points</div>
+</div>
+</div>
+</div>
+<div class="flex-1 w-full relative">
+<div class="aspect-video rounded-lg overflow-hidden bg-surface-container-lowest shadow-sm flex items-center justify-center border border-outline-variant/10">
+<div class="flex flex-col items-center gap-4 text-on-surface-variant opacity-40">
+<span class="material-symbols-outlined text-6xl" data-icon="query_stats">query_stats</span>
+<span class="font-label text-[0.6875rem] font-bold tracking-widest uppercase">Coverage Map Visualizer</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Tooltip/Helper FAB -->
+<div class="fixed bottom-10 right-10">
+<button class="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</button>
+</div>
+</body></html>

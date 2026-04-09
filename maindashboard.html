@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mini Sprintbox - Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#faf9f5",
+                        "surface-container-highest": "#e3e2df",
+                        "error": "#ba1a1a",
+                        "surface-container": "#efeeea",
+                        "surface-dim": "#dbdad6",
+                        "surface-container-low": "#f5f4f0",
+                        "on-secondary-container": "#4c4a84",
+                        "secondary-container": "#c0bdff",
+                        "outline": "#777586",
+                        "surface": "#faf9f5",
+                        "on-tertiary": "#ffffff",
+                        "outline-variant": "#c7c4d7",
+                        "on-surface-variant": "#464554",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#100069",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "on-primary-container": "#c1beff",
+                        "tertiary-container": "#8f3400",
+                        "inverse-on-surface": "#f2f1ed",
+                        "surface-variant": "#e3e2df",
+                        "on-tertiary-container": "#ffb393",
+                        "on-secondary-fixed-variant": "#42407a",
+                        "on-secondary-fixed": "#16124c",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb597",
+                        "tertiary": "#692400",
+                        "surface-tint": "#5148d7",
+                        "surface-container-high": "#e9e8e4",
+                        "on-background": "#1b1c1a",
+                        "secondary": "#5a5893",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#e3dfff",
+                        "primary": "#2a14b4",
+                        "secondary-fixed": "#e3dfff",
+                        "on-primary-fixed-variant": "#372abf",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-surface": "#1b1c1a",
+                        "tertiary-fixed": "#ffdbcd",
+                        "surface-bright": "#faf9f5",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#360f00",
+                        "inverse-surface": "#30312e",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "inverse-primary": "#c3c0ff",
+                        "primary-container": "#4338ca",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf9f5;
+        }
+        .headline-text {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .no-line { border: none !important; }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-screen w-64 z-40 bg-[#f5f4f0] flex flex-col py-8 pr-4 font-['Plus_Jakarta_Sans'] text-sm font-medium">
+<div class="px-8 mb-12">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">dashboard_customize</span>
+</div>
+<div>
+<h1 class="text-lg font-extrabold text-[#1b1c1a]">Mini Sprintbox</h1>
+<p class="text-xs text-[#1b1c1a]/60">Active Workshop</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<!-- Active Navigation: Dashboard -->
+<a class="flex items-center gap-4 py-3 px-8 bg-white text-[#4338CA] rounded-r-full shadow-sm active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-8 text-[#1b1c1a]/70 hover:translate-x-1 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Personas</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-8 text-[#1b1c1a]/70 hover:translate-x-1 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="record_voice_over">record_voice_over</span>
+<span>Pre-Interview</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-8 text-[#1b1c1a]/70 hover:translate-x-1 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+<span>Sprint Flow</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-8 text-[#1b1c1a]/70 hover:translate-x-1 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="summarize">summarize</span>
+<span>Summary</span>
+</a>
+</nav>
+<div class="mt-auto px-8 flex flex-col gap-4">
+<button class="bg-primary hover:bg-primary-container text-white py-3 px-6 rounded-full font-bold transition-all active:scale-95 text-center">
+                New Sprint
+            </button>
+<div class="flex flex-col gap-1 pt-6">
+<a class="flex items-center gap-4 py-2 text-[#1b1c1a]/70 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-4 py-2 text-[#1b1c1a]/70 hover:text-[#4338CA] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="contact_support">contact_support</span>
+<span>Support</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 left-64 right-0 h-16 z-50 bg-[#faf9f5]/80 backdrop-blur-xl flex justify-between items-center px-8 font-['Plus_Jakarta_Sans']">
+<div class="flex items-center gap-2">
+<span class="text-sm font-label tracking-widest text-on-surface-variant uppercase">Project: Nova 2024</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-[#4338CA] font-semibold text-sm px-4 py-2 hover:bg-[#f5f4f0] transition-colors rounded-full active:scale-95 duration-200">Export</button>
+<div class="flex items-center gap-2">
+<button class="p-2 text-[#1b1c1a]/60 hover:text-[#1b1c1a] transition-colors rounded-full hover:bg-[#f5f4f0]">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="p-2 text-[#1b1c1a]/60 hover:text-[#1b1c1a] transition-colors rounded-full hover:bg-[#f5f4f0]">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+<img alt="User profile" class="w-8 h-8 rounded-full bg-surface-container-highest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFaLkyYsFJq_eHIxMlDs2kY4-5u5ov_P7o6kDAiB63S1BuG2ah7hOeWvwIm55x1PkKTXtr_ST-nqSwHfIgcfMuvr1yviLwHjYcqhwY9t6-na6s1peyon2reKnl9eAkhLhopdeUAMnEx_I20Ut37aii7lPiTI90ppprCgaUEIUPO2fqwFusbKSoX-4PW9_JmOM3M_LQ0oOERBEwMU_9wp5-65SR48p2ISknpJASdu3xyY3hsvOZeWo2mJSvtmh2rDuXNfhr13zkRVU"/>
+</div>
+</header>
+<!-- Editorial Content Area -->
+<div class="pt-24 px-12 pb-24 grid grid-cols-12 gap-12">
+<!-- Left Side: Editorial Vision (Strategic Intent) -->
+<div class="col-span-7 flex flex-col gap-16">
+<section>
+<span class="text-xs font-label text-primary font-bold tracking-[0.2em] uppercase mb-6 block">Sprint Challenge</span>
+<h2 class="headline-text text-5xl lg:text-6xl font-extrabold text-on-surface leading-[1.1] tracking-tight">
+                        Redesign the Checkout Flow to reduce <span class="text-primary italic">cognitive load</span> for recurring enterprise users.
+                    </h2>
+</section>
+<section class="bg-surface-container-low p-10 rounded-xl">
+<span class="text-xs font-label text-on-surface-variant font-bold tracking-[0.2em] uppercase mb-4 block">Two-Year Long-Term Goal</span>
+<p class="headline-text text-2xl lg:text-3xl font-medium text-on-surface-variant leading-relaxed">
+                        To become the industry benchmark for "invisible design" in complex financial orchestration, achieving a <span class="text-on-surface font-bold underline decoration-primary decoration-4 underline-offset-8">90% task success rate</span> within 45 seconds of interaction.
+                    </p>
+</section>
+<!-- Activity Feed / Live Workspace Visual -->
+<div class="relative h-64 w-full rounded-xl overflow-hidden group">
+<img alt="Workshop space" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Modern minimalist design studio with large windows, white walls, and a group of professionals working collaboratively around a large wooden table with sketches" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLjdnls6DdKnY1fx3coajg9Wr_V4tIym92Z2Wd-h6F-mr1dvRv7kdupPUYIcOZqQKqQ2_P347OadqUzslGluUa5F2W6GLbOMwk3vAS5zHGY-e8D9uxAhx62ysdVDVh3gDcoCws8YYa35LUVwttKRwL5wGzmz4UAOydlAG1IEFlyUHD4kwesMInft5DvZTqAsH-Ox5lGBkSK6GGd02Cy7a2rbsJRaHBq0EfL96ZGViwyWth-Q8uHc99wfIkV42btvyRKv0wCQ5yp2Y"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#1b1c1a]/60 to-transparent flex items-end p-8">
+<div>
+<p class="text-white/80 text-sm font-medium mb-1">Live Workshop View</p>
+<h4 class="text-white text-xl font-bold">Day 3: Solution Sketching phase currently in progress.</h4>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Functional Cards (Operational Data) -->
+<div class="col-span-5 flex flex-col gap-8">
+<!-- Sprint Status Timeline -->
+<div class="bg-surface-container-lowest p-8 rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="headline-text text-lg font-bold">Sprint Status</h3>
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">Day 3 of 5</span>
+</div>
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-4 relative">
+<div class="w-8 h-8 rounded-full bg-green-500/10 text-green-600 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Map &amp; Target</p>
+<p class="text-xs text-on-surface-variant">Completed Monday, 4:00 PM</p>
+</div>
+<div class="absolute left-4 top-8 bottom-[-24px] w-0.5 bg-surface-container-highest"></div>
+</div>
+<div class="flex items-center gap-4 relative">
+<div class="w-8 h-8 rounded-full bg-green-500/10 text-green-600 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Sketching</p>
+<p class="text-xs text-on-surface-variant">Completed Tuesday, 5:30 PM</p>
+</div>
+<div class="absolute left-4 top-8 bottom-[-24px] w-0.5 bg-primary"></div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 z-10 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm" data-icon="edit_note">edit_note</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-primary">Decide &amp; Storyboard</p>
+<p class="text-xs text-primary font-medium">Active Now • 4 collaborators</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Core Team -->
+<div class="bg-surface-container-lowest p-8 rounded-xl">
+<h3 class="headline-text text-lg font-bold mb-6">Core Team</h3>
+<div class="flex flex-wrap gap-4">
+<div class="flex items-center gap-3 bg-surface-container-low py-2 px-4 rounded-full group cursor-pointer hover:bg-surface-container transition-colors">
+<img alt="Marcus" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq1fFD2vusG_PcnazGL6tXS0FV8M1GuRnwYByYGsESLRNBlu0d2iWweFw_Py6OGQXgBEYM9OnSkPNx-I9Nk2WhNGe61SKV74kPiAvLBA8ovB7BYPzjAvOBw0nErHG4O14F5NvXyl4bEBm6V4O9dpHjoRBRJljZZopdu2THgss9h36j5q2_k0ZrV9bf4KuhNGF3rsp5q9PjqGSwRJsseqJRwbxs1XxoK25ESY0M6dBtmvCVKkl4D6mw66zAwpzdNVGj2opIuLdvqJs"/>
+<div>
+<p class="text-xs font-bold leading-tight">Marcus L.</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Decider</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low py-2 px-4 rounded-full hover:bg-surface-container transition-colors">
+<img alt="Sarah" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEIMihMkuBHrQcBBZYwecLCjCbAELKNx6TqDibEU0piDVCEUmYoKuH4heqTX87cHPwira2ZSQwfbWmuf8NDhZ_ABDGpYAX0g7bLMypi0JGvnvdgOBLiJbW0egTB0Rgf6G7Gdj6JBPEhm-Txt5yPz3pUNsRstdzodVRZruQ8KHlfbtm6RKVR0-DLZ0e2PWxosOrAItd_1sWVaHTqYBG0KBgKZGbFk4loszPKm4WYgiWMYoljwo78J3yhIS-de0tx7BPo9FK7iKI-P0"/>
+<div>
+<p class="text-xs font-bold leading-tight">Sarah A.</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Facilitator</p>
+</div>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low py-2 px-4 rounded-full hover:bg-surface-container transition-colors">
+<img alt="James" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGWOQItJeD5sQVPFqCy1W98g1XOv_3KA8t0JwUb27hyL8IeCt0M0F9ndGSm-8ol13lsg00bAQvk7ww6VBmmZ1DJkqY1dNVMU6FEYZUXuXlFgE0iWNiGd2xHg8AKNDXD5BAJvgCG_vRX-GU3BNaplVYoY0l2ISpW15367LxkL43FB_c-LKwL9i6G_03qsJ1edolP9C8S5OnKyAeP7ec4rhOcOrx5F4j2ojEjjY5UuK7I2NLHdy9oxPjzAocYTR7SFxoJH5_fnUawM0"/>
+<div>
+<p class="text-xs font-bold leading-tight">James K.</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Designer</p>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<!-- Active Artifacts -->
+<div class="bg-surface-container-lowest p-8 rounded-xl">
+<div class="flex justify-between items-center mb-6">
+<h3 class="headline-text text-lg font-bold">Active Artifacts</h3>
+<button class="text-primary text-xs font-bold hover:underline">View Wall</button>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+</div>
+<div>
+<p class="text-sm font-bold">User Journey Map</p>
+<p class="text-xs text-on-surface-variant italic">V2.4 • Updated 2h ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="draw">draw</span>
+</div>
+<div>
+<p class="text-sm font-bold">Sketch Concepts</p>
+<p class="text-xs text-on-surface-variant italic">8 Artboards • Active</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white rounded-md flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+</div>
+<div>
+<p class="text-sm font-bold">Sprint Questions</p>
+<p class="text-xs text-on-surface-variant italic">3 Questions • Resolved</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button for Sprint Actions -->
+<div class="fixed bottom-10 right-10">
+<button class="bg-primary hover:bg-primary-container text-white h-16 px-8 rounded-full shadow-2xl flex items-center gap-3 transition-all active:scale-95 group">
+<span class="material-symbols-outlined text-2xl">rocket_launch</span>
+<span class="font-bold text-lg">Next Step</span>
+</button>
+</div>
+</body></html>
