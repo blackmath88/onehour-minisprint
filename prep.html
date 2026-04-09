@@ -328,6 +328,9 @@ function copyGenLink() {
 }
 
 function openFacilitate() {
+  // re-read cfg from hash if needed
+  const h = location.hash.replace("#","");
+  if (h && !cfg.code) { try { cfg = JSON.parse(atob(h)); } catch(e){} }
   const resps = JSON.parse(localStorage.getItem('djresps_' + (cfg.code||'x')) || '[]');
   const payload = { title: cfg.title, challenge: cfg.challenge, facilitator: cfg.facilitator, responses: resps };
   const enc = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
