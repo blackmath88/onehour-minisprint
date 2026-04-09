@@ -617,16 +617,25 @@ function resetAll() {
 function checkImport() {
   const hash = location.hash;
   if (!hash.startsWith('#import=')) return;
+  const raw = hash.replace('#import=','');
+  history.replaceState(null,'',location.pathname);
   try {
-    const payload = JSON.parse(decodeURIComponent(escape(atob(hash.replace('#import=','')))));
-    if (!payload.responses?.length) return;
+    let jsonStr;
+    try { jsonStr = decodeURIComponent(escape(atob(raw))); }
+    catch(e1) { jsonStr = atob(raw); }
+    const payload = JSON.parse(jsonStr);
     window._prep = payload;
-    const n = payload.responses.length;
-    document.getElementById('import-count').textContent = n + ' prep response' + (n!==1?'s':'') + ' ready to import';
-    document.getElementById('import-names').textContent = payload.responses.map(r=>r.name).filter(Boolean).join(', ');
+    const resps = payload.responses || [];
+    const n = resps.length;
+    document.getElementById('import-count').textContent = n > 0
+      ? n + ' prep response' + (n!==1?'s':'') + ' ready to import'
+      : 'Session ready — no prep responses yet';
+    document.getElementById('import-names').textContent = resps.map(r=>r.name).filter(Boolean).join(', ');
     document.getElementById('import-banner').classList.remove('hidden');
-    history.replaceState(null,'',location.pathname);
-  } catch(e) { console.warn('Import failed',e); }
+  } catch(e) {
+    console.warn('Import parse failed. Raw:', raw.substring(0,80), e);
+    toast('Import link unreadable — copy the board link again from prep');
+  }
 }
 
 function importPrep() {
@@ -638,13 +647,16 @@ function importPrep() {
   if (session.title) {
     document.getElementById('hdr-title').textContent = session.title;
     document.getElementById('hdr-sub').textContent = session.challenge || '';
+    document.getElementById('code-display').textContent = 'PREP';
   }
-  p.responses.forEach(r => {
-    r.pains?.forEach(pain => { if (pain) addNote('back', pain, r.name + (r.role?' · '+r.role:'')); });
-    if (r.change) addNote('back', r.change, r.name + ' [change]');
+  const resps = p.responses || [];
+  resps.forEach(r => {
+    (r.pains || []).forEach(pain => { if (pain && pain.trim()) addNote('back', pain.trim(), r.name + (r.role ? ' · '+r.role : '')); });
+    if (r.change && r.change.trim()) addNote('back', r.change.trim(), r.name + ' [change]');
   });
   document.getElementById('import-banner').classList.add('hidden');
-  toast('Imported ' + session.responses.length + ' notes');
+  window._prep = null;
+  toast('Imported ' + session.responses.length + ' notes from prep');
 }
 
 // Init
