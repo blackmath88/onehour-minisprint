@@ -7,46 +7,37 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script src="_supabase.js"></script>
 <script>
 tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "background": "#faf9f5", "surface-container-highest": "#e3e2df",
-        "surface-container": "#efeeea", "surface-dim": "#dbdad6",
-        "surface-container-low": "#f5f4f0", "on-secondary-container": "#4c4a84",
-        "secondary-container": "#c0bdff", "outline": "#777586",
-        "surface": "#faf9f5", "outline-variant": "#c7c4d7",
-        "on-surface-variant": "#464554", "surface-variant": "#e3e2df",
-        "on-primary-fixed": "#100069", "surface-container-high": "#e9e8e4",
-        "on-background": "#1b1c1a", "secondary": "#5a5893",
-        "surface-container-lowest": "#ffffff", "primary-fixed": "#e3dfff",
-        "primary": "#2a14b4", "on-primary-fixed-variant": "#372abf",
-        "primary-fixed-dim": "#c3c0ff", "on-surface": "#1b1c1a",
-        "surface-bright": "#faf9f5", "on-primary": "#ffffff",
-        "primary-container": "#4338ca", "inverse-surface": "#30312e",
-        "inverse-primary": "#c3c0ff", "surface-tint": "#5148d7",
-        "secondary-fixed": "#e3dfff", "error": "#ba1a1a",
-      },
-      borderRadius: { "DEFAULT": "0.25rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
-      fontFamily: { "headline": ["Plus Jakarta Sans"], "body": ["Inter"], "label": ["Inter"] }
-    }
-  }
+  darkMode:"class",
+  theme:{extend:{
+    colors:{
+      "background":"#faf9f5","surface-container-highest":"#e3e2df","surface-container":"#efeeea",
+      "surface-dim":"#dbdad6","surface-container-low":"#f5f4f0","on-secondary-container":"#4c4a84",
+      "secondary-container":"#c0bdff","outline":"#777586","surface":"#faf9f5",
+      "outline-variant":"#c7c4d7","on-surface-variant":"#464554","surface-variant":"#e3e2df",
+      "on-primary-fixed":"#100069","surface-container-high":"#e9e8e4","on-background":"#1b1c1a",
+      "secondary":"#5a5893","surface-container-lowest":"#ffffff","primary-fixed":"#e3dfff",
+      "primary":"#2a14b4","on-primary-fixed-variant":"#372abf","primary-fixed-dim":"#c3c0ff",
+      "on-surface":"#1b1c1a","surface-bright":"#faf9f5","on-primary":"#ffffff",
+      "primary-container":"#4338ca","surface-tint":"#5148d7","error":"#ba1a1a",
+    },
+    borderRadius:{"DEFAULT":"0.25rem","lg":"1rem","xl":"1.5rem","full":"9999px"},
+    fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Inter"],"label":["Inter"]}
+  }}
 }
 </script>
 <style>
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-  body { font-family: 'Inter', sans-serif; background-color: #faf9f5; color: #1b1c1a; }
-  h1,h2,h3,h4 { font-family: 'Plus Jakarta Sans', sans-serif; }
-  .step { display: none; }
-  .step.active { display: block; }
-  textarea:focus, input:focus { outline: none; border-color: #2a14b4 !important; }
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  body{font-family:'Inter',sans-serif;background-color:#faf9f5;color:#1b1c1a;}
+  h1,h2,h3,h4{font-family:'Plus Jakarta Sans',sans-serif;}
+  .step{display:none;} .step.active{display:block;}
+  textarea:focus,input:focus{outline:none;border-color:#2a14b4!important;}
 </style>
 </head>
 <body class="bg-background text-on-surface min-h-screen">
 
-<!-- Top nav -->
 <nav class="fixed top-0 w-full z-50 bg-[#faf9f5]/80 backdrop-blur-xl h-16 flex justify-between items-center px-8 font-['Plus_Jakarta_Sans']">
   <div class="flex items-center gap-3">
     <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center">
@@ -61,71 +52,72 @@ tailwind.config = {
 
 <main class="pt-24 pb-20 px-6 max-w-xl mx-auto">
 
-  <!-- Session banner — populated by JS -->
+  <!-- Session banner -->
   <div id="session-banner" class="mb-10 hidden">
-    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-primary bg-primary-fixed px-2 py-1 rounded-full mb-4 inline-block" id="banner-phase">Sprint Prep</span>
+    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-primary bg-primary-fixed px-2 py-1 rounded-full mb-4 inline-block">Sprint Prep</span>
     <h1 class="text-3xl font-extrabold tracking-tight text-on-surface leading-tight mb-3" id="banner-title">—</h1>
     <p class="text-base text-on-surface-variant leading-relaxed bg-surface-container-low rounded-xl p-4 border-l-4 border-primary/30" id="banner-challenge">—</p>
-    <div class="flex gap-4 mt-4 text-xs text-on-surface-variant">
-      <span id="banner-facilitator" class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span> —</span>
-      <span id="banner-date" class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span> —</span>
+    <div class="flex gap-4 mt-4 text-xs text-on-surface-variant flex-wrap">
+      <span id="banner-facilitator" class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">person</span>—</span>
+      <span id="banner-date" class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">calendar_today</span>—</span>
+      <span id="banner-resp-count" class="flex items-center gap-1 text-primary font-semibold hidden">
+        <span class="material-symbols-outlined text-sm">group</span><span id="resp-num">0</span> responses so far
+      </span>
     </div>
   </div>
 
-  <!-- Setup mode — shown when no session params -->
+  <!-- Facilitator setup mode -->
   <div id="setup-mode">
     <div class="mb-8">
       <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-primary bg-primary-fixed px-2 py-1 rounded-full mb-4 inline-block">Facilitator Setup</span>
       <h1 class="text-3xl font-extrabold tracking-tight text-on-surface leading-tight mb-2">Create your prep link</h1>
-      <p class="text-on-surface-variant leading-relaxed">Fill this in once — you'll get a link to send to participants before the session.</p>
+      <p class="text-on-surface-variant leading-relaxed">Fill this in once — share the link with participants. All responses save to the cloud.</p>
     </div>
-
-    <div class="bg-surface-container-lowest rounded-xl p-8 space-y-6 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+    <div class="bg-surface-container-lowest rounded-xl p-8 space-y-5 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
       <div>
         <label class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant block mb-2">Session title</label>
-        <input type="text" id="cfg-title" placeholder="e.g. AI adoption discovery — University" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 transition-colors"/>
+        <input type="text" id="cfg-title" placeholder="e.g. AI adoption discovery — University" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm"/>
       </div>
       <div>
         <label class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant block mb-2">The challenge question</label>
-        <textarea id="cfg-challenge" rows="3" placeholder="e.g. Where does manual effort slow us down most in our processes?" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40 resize-none transition-colors"></textarea>
+        <textarea id="cfg-challenge" rows="3" placeholder="e.g. Where does manual effort slow us down most?" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm resize-none"></textarea>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant block mb-2">Your name</label>
-          <input type="text" id="cfg-facilitator" placeholder="Achim" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40"/>
+          <input type="text" id="cfg-facilitator" placeholder="Achim" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm"/>
         </div>
         <div>
           <label class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant block mb-2">Session date</label>
-          <input type="text" id="cfg-date" placeholder="10 Apr 2026" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant/40"/>
+          <input type="text" id="cfg-date" placeholder="10 Apr 2026" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm"/>
         </div>
       </div>
-      <button onclick="generateLink()" class="w-full py-3 bg-gradient-to-br from-primary to-primary-container text-white rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2">
+      <button onclick="createSession()" id="create-btn" class="w-full py-3 bg-gradient-to-br from-primary to-primary-container text-white rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2">
         <span class="material-symbols-outlined text-sm">link</span> Generate participant link
       </button>
     </div>
 
-    <!-- Generated link result -->
     <div id="link-result" class="hidden mt-6 bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
       <div class="bg-on-surface px-6 py-4 flex items-center gap-3">
-        <span class="material-symbols-outlined text-white text-lg">check_circle</span>
+        <span class="material-symbols-outlined text-white text-lg" style="font-variation-settings:'FILL' 1">check_circle</span>
         <div>
-          <p class="text-white font-bold text-sm">Link ready</p>
-          <p class="text-white/60 text-xs">Send this to participants before the session</p>
+          <p class="text-white font-bold text-sm">Session created</p>
+          <p class="text-white/60 text-xs">Send this link to participants — responses save automatically</p>
         </div>
       </div>
       <div class="p-6 space-y-4">
         <div class="bg-surface-container-low rounded-xl p-4 font-mono text-xs text-on-surface-variant break-all leading-relaxed" id="generated-url-display">—</div>
         <div class="flex gap-3">
-          <button onclick="copyGenLink()" class="flex-1 py-2.5 border border-outline-variant/30 rounded-full text-sm font-semibold text-on-surface hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
+          <button onclick="copyGenLink()" class="flex-1 py-2.5 border border-outline-variant/30 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center justify-center gap-2">
             <span class="material-symbols-outlined text-sm">content_copy</span> Copy link
           </button>
-          <button onclick="openFacilitate()" class="flex-1 py-2.5 bg-primary text-white rounded-full text-sm font-bold hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2">
+          <button onclick="goToBoard()" class="flex-1 py-2.5 bg-primary text-white rounded-full text-sm font-bold hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2">
             <span class="material-symbols-outlined text-sm">dashboard</span> Open board
           </button>
         </div>
-        <div id="resp-counter" class="text-center text-xs text-on-surface-variant pt-2 hidden">
-          <span class="font-bold text-on-surface" id="resp-num">0</span> responses collected
-          <button onclick="openFacilitate()" class="ml-2 text-primary font-semibold hover:underline">Import into board →</button>
+        <div id="fac-resp-counter" class="text-center text-xs text-on-surface-variant pt-1 hidden">
+          <span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-1 animate-pulse"></span>
+          <span class="font-bold text-on-surface" id="fac-resp-num">0</span> responses collected
         </div>
       </div>
     </div>
@@ -134,7 +126,7 @@ tailwind.config = {
   <!-- Already submitted -->
   <div id="already-done" class="hidden bg-surface-container-lowest rounded-xl p-10 text-center shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
     <div class="w-14 h-14 rounded-full bg-primary-fixed flex items-center justify-center mx-auto mb-4">
-      <span class="material-symbols-outlined text-primary text-2xl">check_circle</span>
+      <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings:'FILL' 1">check_circle</span>
     </div>
     <h2 class="text-xl font-bold mb-2">Already submitted</h2>
     <p class="text-on-surface-variant text-sm mb-6">You've already filled out prep for this session.</p>
@@ -143,8 +135,6 @@ tailwind.config = {
 
   <!-- Participant form -->
   <div id="participant-mode" class="hidden">
-
-    <!-- Step progress -->
     <div class="flex items-center gap-2 mb-8">
       <div id="dot-0" class="h-2 w-5 rounded-full bg-on-surface transition-all"></div>
       <div id="dot-1" class="h-2 w-2 rounded-full bg-outline-variant transition-all"></div>
@@ -153,11 +143,11 @@ tailwind.config = {
       <span class="ml-2 text-xs text-on-surface-variant font-medium" id="step-label">Step 1 of 4</span>
     </div>
 
-    <!-- Step 0: Identity -->
+    <!-- Step 0 -->
     <div class="step active" id="step-0">
       <h1 class="text-3xl font-extrabold tracking-tight mb-2">Who are you?</h1>
-      <p class="text-on-surface-variant mb-8 leading-relaxed">This helps the facilitator understand your perspective in the session.</p>
-      <div class="bg-surface-container-lowest rounded-xl p-8 space-y-6 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+      <p class="text-on-surface-variant mb-8 leading-relaxed">Helps the facilitator understand your perspective.</p>
+      <div class="bg-surface-container-lowest rounded-xl p-8 space-y-5 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
         <div>
           <label class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant block mb-2">Your name</label>
           <input type="text" id="f-name" placeholder="First name is fine" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm"/>
@@ -178,24 +168,24 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- Step 1: Pain points -->
+    <!-- Step 1 -->
     <div class="step" id="step-1">
       <h1 class="text-3xl font-extrabold tracking-tight mb-2">What's holding you back?</h1>
-      <p class="text-on-surface-variant mb-8 leading-relaxed">Write up to 3 things that slow you down or feel broken. One idea per note.</p>
+      <p class="text-on-surface-variant mb-8 leading-relaxed">Up to 3 things that slow you down or feel broken. One idea per note.</p>
       <div class="space-y-4">
         <div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-xl p-5">
           <span class="text-[10px] font-bold tracking-widest uppercase text-yellow-800/60 block mb-3">01</span>
-          <textarea id="pain-0" maxlength="140" oninput="cc(this,'cc0')" placeholder="e.g. Approval process takes weeks, nothing is visible…" rows="3" class="w-full bg-transparent border-none text-sm text-yellow-900 placeholder:text-yellow-800/30 resize-none"></textarea>
+          <textarea id="pain-0" maxlength="140" oninput="cc(this,'cc0')" placeholder="e.g. Approval process takes weeks…" rows="3" class="w-full bg-transparent border-none text-sm text-yellow-900 placeholder:text-yellow-800/30 resize-none focus:outline-none"></textarea>
           <div class="text-right text-[10px] text-yellow-800/40 font-mono" id="cc0">0/140</div>
         </div>
         <div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-xl p-5">
           <span class="text-[10px] font-bold tracking-widest uppercase text-yellow-800/60 block mb-3">02 <span class="font-normal normal-case tracking-normal opacity-50">optional</span></span>
-          <textarea id="pain-1" maxlength="140" oninput="cc(this,'cc1')" placeholder="e.g. Reports built manually every month…" rows="3" class="w-full bg-transparent border-none text-sm text-yellow-900 placeholder:text-yellow-800/30 resize-none"></textarea>
+          <textarea id="pain-1" maxlength="140" oninput="cc(this,'cc1')" placeholder="e.g. Reports built manually every month…" rows="3" class="w-full bg-transparent border-none text-sm text-yellow-900 placeholder:text-yellow-800/30 resize-none focus:outline-none"></textarea>
           <div class="text-right text-[10px] text-yellow-800/40 font-mono" id="cc1">0/140</div>
         </div>
         <div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-xl p-5">
           <span class="text-[10px] font-bold tracking-widest uppercase text-yellow-800/60 block mb-3">03 <span class="font-normal normal-case tracking-normal opacity-50">optional</span></span>
-          <textarea id="pain-2" maxlength="140" oninput="cc(this,'cc2')" placeholder="e.g. No one knows who owns what…" rows="3" class="w-full bg-transparent border-none text-sm text-yellow-900 placeholder:text-yellow-800/30 resize-none"></textarea>
+          <textarea id="pain-2" maxlength="140" oninput="cc(this,'cc2')" placeholder="e.g. No one knows who owns what…" rows="3" class="w-full bg-transparent border-none text-sm text-yellow-900 placeholder:text-yellow-800/30 resize-none focus:outline-none"></textarea>
           <div class="text-right text-[10px] text-yellow-800/40 font-mono" id="cc2">0/140</div>
         </div>
       </div>
@@ -209,13 +199,13 @@ tailwind.config = {
       </div>
     </div>
 
-    <!-- Step 2: One thing to change -->
+    <!-- Step 2 -->
     <div class="step" id="step-2">
       <h1 class="text-3xl font-extrabold tracking-tight mb-2">One thing you'd change tomorrow.</h1>
-      <p class="text-on-surface-variant mb-8 leading-relaxed">If you could fix or improve one thing immediately — what would it be?</p>
+      <p class="text-on-surface-variant mb-8 leading-relaxed">If you could fix one thing immediately — what would it be?</p>
       <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
         <label class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant block mb-3">Your answer</label>
-        <textarea id="f-change" maxlength="280" oninput="cc(this,'cc3')" placeholder="e.g. Give everyone visibility into where requests are stuck in the approval chain…" rows="5" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm text-on-surface resize-none"></textarea>
+        <textarea id="f-change" maxlength="280" oninput="cc(this,'cc3')" placeholder="e.g. Give everyone visibility into where requests are stuck…" rows="5" class="w-full bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm resize-none"></textarea>
         <div class="text-right text-[10px] text-on-surface-variant/40 font-mono mt-2" id="cc3">0/280</div>
       </div>
       <div class="flex justify-between mt-6">
@@ -231,13 +221,13 @@ tailwind.config = {
     <!-- Step 3: Review -->
     <div class="step" id="step-3">
       <h1 class="text-3xl font-extrabold tracking-tight mb-2">Looks good?</h1>
-      <p class="text-on-surface-variant mb-8 leading-relaxed">Review your answers before submitting.</p>
+      <p class="text-on-surface-variant mb-8">Review your answers before submitting.</p>
       <div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]" id="review-card"></div>
       <div class="flex justify-between mt-6">
         <button onclick="prev(3)" class="py-3 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors flex items-center gap-2">
           <span class="material-symbols-outlined text-sm">arrow_back</span> Edit
         </button>
-        <button onclick="submit()" class="py-3 px-8 bg-gradient-to-br from-primary to-primary-container text-white rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center gap-2">
+        <button onclick="submitForm()" id="submit-btn" class="py-3 px-8 bg-gradient-to-br from-primary to-primary-container text-white rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center gap-2">
           <span class="material-symbols-outlined text-sm">send</span> Submit
         </button>
       </div>
@@ -251,75 +241,94 @@ tailwind.config = {
         </div>
         <h1 class="text-3xl font-extrabold mb-3">You're all set.</h1>
         <p class="text-on-surface-variant leading-relaxed max-w-sm mx-auto mb-8">Your input has been saved. The facilitator will bring everything into the session. See you there.</p>
-        <div class="bg-surface-container-lowest rounded-xl overflow-hidden text-left" id="done-card"></div>
+        <div class="bg-surface-container-lowest rounded-xl overflow-hidden text-left shadow-[0px_12px_32px_rgba(27,28,26,0.04)]" id="done-card"></div>
       </div>
     </div>
-
   </div>
 
 </main>
 
-<!-- Toast -->
-<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none"></div>
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none whitespace-nowrap"></div>
 
 <script>
-let cfg = {}, curStep = 0;
+let cfg = {}, curStep = 0, pollInterval = null;
 
-function toast(msg) {
+function toast(msg, dur=2500) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.remove('translate-y-20','opacity-0');
   t.classList.add('translate-y-0','opacity-100');
-  setTimeout(() => { t.classList.add('translate-y-20','opacity-0'); t.classList.remove('translate-y-0','opacity-100'); }, 2500);
+  setTimeout(() => { t.classList.add('translate-y-20','opacity-0'); t.classList.remove('translate-y-0','opacity-100'); }, dur);
 }
 
 function cc(ta, id) { document.getElementById(id).textContent = ta.value.length + '/' + ta.maxLength; }
-
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function rand() { const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join(''); }
 
-function rand() {
-  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return Array.from({length:6}, () => c[Math.floor(Math.random()*c.length)]).join('');
-}
-
-function init() {
+async function init() {
   const hash = location.hash.replace('#','');
   if (!hash) return;
   try {
     const p = JSON.parse(atob(hash));
-    if (!p.title) return;
+    if (!p.code) return;
     cfg = p;
     document.getElementById('setup-mode').classList.add('hidden');
     document.getElementById('session-banner').classList.remove('hidden');
-    document.getElementById('banner-title').textContent = p.title;
-    document.getElementById('banner-challenge').textContent = p.challenge;
-    document.getElementById('banner-facilitator').innerHTML = '<span class="material-symbols-outlined text-sm">person</span> ' + esc(p.facilitator || '—');
-    document.getElementById('banner-date').innerHTML = '<span class="material-symbols-outlined text-sm">calendar_today</span> ' + esc(p.date || '—');
-    const subKey = 'djsub_' + (p.code||'x');
-    if (localStorage.getItem(subKey)) {
+    document.getElementById('banner-title').textContent = p.title || '—';
+    document.getElementById('banner-challenge').textContent = p.challenge || '—';
+    document.getElementById('banner-facilitator').innerHTML = '<span class="material-symbols-outlined text-sm">person</span> Facilitated by ' + esc(p.facilitator||'—');
+    document.getElementById('banner-date').innerHTML = '<span class="material-symbols-outlined text-sm">calendar_today</span> ' + esc(p.date||'');
+    // Check already submitted
+    if (localStorage.getItem('djsub_'+p.code)) {
       document.getElementById('already-done').classList.remove('hidden');
     } else {
       document.getElementById('participant-mode').classList.remove('hidden');
     }
-    updateFacPanel();
+    // Show live response count
+    pollResponseCount();
+    pollInterval = setInterval(pollResponseCount, 8000);
+  } catch(e) { console.warn('Init error', e); }
+}
+
+async function pollResponseCount() {
+  if (!cfg.code) return;
+  try {
+    const data = await sb.select('responses', `session_code=eq.${cfg.code}&select=id`);
+    const n = data.length;
+    if (n > 0) {
+      document.getElementById('banner-resp-count').classList.remove('hidden');
+      document.getElementById('resp-num').textContent = n;
+    }
+    // Also update fac counter if visible
+    const fc = document.getElementById('fac-resp-counter');
+    if (fc) { fc.classList.toggle('hidden', n===0); document.getElementById('fac-resp-num').textContent = n; }
   } catch(e) {}
 }
 
-function generateLink() {
+async function createSession() {
   const title = document.getElementById('cfg-title').value.trim();
   const challenge = document.getElementById('cfg-challenge').value.trim();
   const facilitator = document.getElementById('cfg-facilitator').value.trim();
   const date = document.getElementById('cfg-date').value.trim();
   if (!title || !challenge) { toast('Fill in title and challenge first'); return; }
+  const btn = document.getElementById('create-btn');
+  btn.textContent = 'Creating…'; btn.disabled = true;
   const code = rand();
-  cfg = { title, challenge, facilitator, date, code };
-  const encoded = btoa(JSON.stringify(cfg));
-  const url = location.origin + location.pathname + '#' + encoded;
-  document.getElementById('generated-url-display').textContent = url;
-  document.getElementById('link-result').classList.remove('hidden');
-  localStorage.setItem('djcfg_last', JSON.stringify(cfg));
-  updateFacPanel();
-  toast('Link generated!');
+  try {
+    await sb.insert('sessions', { code, title, challenge, facilitator, date });
+    cfg = { code, title, challenge, facilitator, date };
+    const encoded = btoa(JSON.stringify(cfg));
+    const url = location.origin + location.pathname + '#' + encoded;
+    document.getElementById('generated-url-display').textContent = url;
+    document.getElementById('link-result').classList.remove('hidden');
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm">check</span> Created!';
+    pollInterval = setInterval(pollResponseCount, 5000);
+    toast('Session created — link ready to share');
+  } catch(e) {
+    console.error(e);
+    toast('Error creating session — check Supabase config');
+    btn.textContent = 'Generate participant link'; btn.disabled = false;
+  }
 }
 
 function copyGenLink() {
@@ -327,85 +336,74 @@ function copyGenLink() {
   toast('Copied!');
 }
 
-function openFacilitate() {
-  // re-read cfg from hash if needed
-  const h = location.hash.replace("#","");
-  if (h && !cfg.code) { try { cfg = JSON.parse(atob(h)); } catch(e){} }
-  const resps = JSON.parse(localStorage.getItem('djresps_' + (cfg.code||'x')) || '[]');
-  const payload = { title: cfg.title, challenge: cfg.challenge, facilitator: cfg.facilitator, responses: resps };
-  const enc = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-  const base = location.href.replace(/prep\.html.*$/, '') + 'facilitate.html';
-  window.open(base + '#import=' + enc, '_blank');
-}
-
-function updateFacPanel() {
-  const resps = JSON.parse(localStorage.getItem('djresps_' + (cfg.code||'x')) || '[]');
-  const el = document.getElementById('resp-counter');
-  const num = document.getElementById('resp-num');
-  if (resps.length > 0) {
-    el.classList.remove('hidden');
-    num.textContent = resps.length;
-  }
+function goToBoard() {
+  window.open('facilitate.html?code=' + cfg.code, '_blank');
 }
 
 function showStep(n) {
   curStep = n;
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('step-' + n);
+  const el = document.getElementById('step-'+n);
   if (el) el.classList.add('active');
-  const labels = ['Step 1 of 4 — Who are you?', 'Step 2 of 4 — Pain points', 'Step 3 of 4 — One change', 'Step 4 of 4 — Review'];
-  const stepLabel = document.getElementById('step-label');
-  if (stepLabel && n < labels.length) stepLabel.textContent = labels[n];
+  const labels = ['Step 1 of 4 — Who are you?','Step 2 of 4 — Pain points','Step 3 of 4 — One change','Step 4 of 4 — Review'];
+  const sl = document.getElementById('step-label');
+  if (sl && n < labels.length) sl.textContent = labels[n];
   [0,1,2,3].forEach(i => {
     const d = document.getElementById('dot-'+i);
     if (!d) return;
-    d.className = i === n ? 'h-2 w-5 rounded-full bg-on-surface transition-all'
-      : i < n ? 'h-2 w-2 rounded-full bg-primary transition-all'
+    d.className = i===n ? 'h-2 w-5 rounded-full bg-on-surface transition-all'
+      : i<n ? 'h-2 w-2 rounded-full bg-primary transition-all'
       : 'h-2 w-2 rounded-full bg-outline-variant transition-all';
   });
 }
 
 function next(from) {
-  if (from === 0 && !document.getElementById('f-name').value.trim()) { toast('Please enter your name'); return; }
-  if (from === 1 && !document.getElementById('pain-0').value.trim()) { toast('Add at least one pain point'); return; }
-  if (from === 2 && !document.getElementById('f-change').value.trim()) { toast('Add your one thing to change'); return; }
-  if (from === 2) buildReview();
-  showStep(from + 1);
+  if (from===0 && !document.getElementById('f-name').value.trim()) { toast('Please enter your name'); return; }
+  if (from===1 && !document.getElementById('pain-0').value.trim()) { toast('Add at least one pain point'); return; }
+  if (from===2 && !document.getElementById('f-change').value.trim()) { toast('Add your one thing to change'); return; }
+  if (from===2) buildReview();
+  showStep(from+1);
 }
 
-function prev(from) { showStep(from - 1); }
+function prev(from) { showStep(from-1); }
 
 function buildReview() {
-  const pains = ['pain-0','pain-1','pain-2'].map(id => document.getElementById(id).value.trim()).filter(Boolean);
+  const pains = ['pain-0','pain-1','pain-2'].map(id=>document.getElementById(id).value.trim()).filter(Boolean);
   document.getElementById('review-card').innerHTML = `
     <div class="p-6 border-b border-outline-variant/10">
       <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-1">Participant</div>
-      <p class="font-bold text-on-surface">${esc(document.getElementById('f-name').value)}</p>
+      <p class="font-bold">${esc(document.getElementById('f-name').value)}</p>
       <p class="text-sm text-on-surface-variant">${esc(document.getElementById('f-role').value)} · ${esc(document.getElementById('f-org').value)}</p>
     </div>
     <div class="p-6 border-b border-outline-variant/10">
       <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-3">Pain points</div>
-      <div class="space-y-2">${pains.map(p => `<div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-4 py-3 text-sm text-yellow-900">${esc(p)}</div>`).join('')}</div>
+      ${pains.map(p=>`<div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-4 py-3 text-sm text-yellow-900 mb-2">${esc(p)}</div>`).join('')}
     </div>
     <div class="p-6">
-      <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-2">One thing to change</div>
-      <p class="text-sm text-on-surface leading-relaxed">${esc(document.getElementById('f-change').value.trim())}</p>
+      <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-2">One change</div>
+      <p class="text-sm leading-relaxed">${esc(document.getElementById('f-change').value.trim())}</p>
     </div>`;
 }
 
-function submit() {
+async function submitForm() {
   const name = document.getElementById('f-name').value.trim();
-  const pains = ['pain-0','pain-1','pain-2'].map(id => document.getElementById(id).value.trim()).filter(Boolean);
+  const role = document.getElementById('f-role').value.trim();
+  const org  = document.getElementById('f-org').value.trim();
+  const pains = ['pain-0','pain-1','pain-2'].map(id=>document.getElementById(id).value.trim()).filter(Boolean);
   const change = document.getElementById('f-change').value.trim();
-  const entry = { id: Date.now(), name, role: document.getElementById('f-role').value.trim(), org: document.getElementById('f-org').value.trim(), pains, change, at: new Date().toISOString() };
-  const key = 'djresps_' + (cfg.code||'x');
-  const existing = JSON.parse(localStorage.getItem(key) || '[]');
-  existing.push(entry);
-  localStorage.setItem(key, JSON.stringify(existing));
-  localStorage.setItem('djsub_' + (cfg.code||'x'), '1');
-  buildDone(entry);
-  showStep('done');
-  toast('Submitted! Thank you ' + name);
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  try {
+    await sb.insert('responses', { session_code: cfg.code, name, role, org, pains, change });
+    localStorage.setItem('djsub_'+cfg.code, '1');
+    buildDone({ name, role, pains, change });
+    showStep('done');
+    toast('Submitted! Thank you ' + name);
+  } catch(e) {
+    console.error(e);
+    toast('Save failed — check connection');
+    btn.innerHTML = '<span class="material-symbols-outlined text-sm">send</span> Submit'; btn.disabled = false;
+  }
 }
 
 function buildDone(e) {
@@ -416,19 +414,18 @@ function buildDone(e) {
     </div>
     <div class="p-6">
       <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-3">Your notes</div>
-      <div class="space-y-2">${e.pains.map(p=>`<div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-4 py-3 text-sm text-yellow-900">${esc(p)}</div>`).join('')}</div>
+      ${e.pains.map(p=>`<div class="bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-4 py-3 text-sm text-yellow-900 mb-2">${esc(p)}</div>`).join('')}
     </div>`;
 }
 
 function resetSub() {
-  localStorage.removeItem('djsub_' + (cfg.code||'x'));
+  localStorage.removeItem('djsub_'+cfg.code);
   document.getElementById('already-done').classList.add('hidden');
   document.getElementById('participant-mode').classList.remove('hidden');
   showStep(0);
 }
 
 init();
-setInterval(updateFacPanel, 3000);
 </script>
 </body>
 </html>
