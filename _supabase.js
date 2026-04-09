@@ -4,8 +4,8 @@
 // upload this file alongside prep.html and facilitate.html
 // ─────────────────────────────────────────────
 // Find these in: Supabase dashboard → Settings → API
-const SUPABASE_URL  = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON = 'YOUR_ANON_PUBLIC_KEY';
+const SUPABASE_URL  = 'https://rlsbzzlpgbhrytbxzxbn.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_0mbp8aRaV2rI2Z8lERoMhg_IOmcnWpF';
 
 // ─── Tiny Supabase client (no npm needed) ────
 const sb = {
