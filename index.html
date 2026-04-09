@@ -1,0 +1,378 @@
+<!doctype html>
+<!--
+Mini Sprintbox — Single-file static prototype
+
+README
+How to run locally:
+1) Open this index.html directly in a browser, OR
+2) Serve folder with: python3 -m http.server 8080
+3) Open: http://localhost:8080
+
+Deploy to Azure Static Web Apps:
+1) Push this single file to a GitHub repo.
+2) In Azure, create Static Web App and connect repo.
+3) Build preset: Custom
+   - App location: /
+   - Output location: /
+   - Build command: (leave empty)
+
+Embed in Squarespace:
+1) Host this file on Azure SWA (or another host).
+2) Add a Squarespace Code block with:
+   <iframe src="https://YOUR-APP-URL" width="100%" height="920" style="border:0;border-radius:16px;"></iframe>
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Sprintbox</title>
+    <style>
+      :root {
+        --background: #faf9f5;
+        --surface-low: #f5f4f0;
+        --surface-lowest: #ffffff;
+        --surface-bright: #faf9f5;
+        --surface-tint: rgba(81, 72, 215, 0.6);
+        --primary: #2a14b4;
+        --primary-container: #4338ca;
+        --primary-fixed: #e3dfff;
+        --text: #1b1c1a;
+        --muted: #67676a;
+        --outline-ghost: rgba(199, 196, 215, 0.15);
+        --radius-lg: 1rem;
+        --radius-md: 0.75rem;
+        --radius-full: 9999px;
+        --ambient-shadow: 0 12px 32px rgba(27, 28, 26, 0.06);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+        color: var(--text);
+        background: var(--background);
+      }
+      h1,h2,h3,h4 { font-family: "Plus Jakarta Sans", Inter, sans-serif; margin: 0; letter-spacing: -0.01em; }
+      .shell { min-height: 100vh; display: grid; grid-template-columns: 290px 1fr; gap: 20px; padding: 18px; }
+      .sidebar {
+        background: var(--surface-tint);
+        backdrop-filter: blur(20px);
+        border-radius: var(--radius-lg);
+        padding: 20px 14px;
+        color: #fff;
+        position: sticky; top: 18px; height: calc(100vh - 36px);
+      }
+      .brand p { margin: 8px 0 18px; color: rgba(255,255,255,.85); font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+      .nav { display: grid; gap: 8px; }
+      .nav button {
+        border: 0;
+        border-radius: var(--radius-full);
+        background: rgba(255,255,255,.12);
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 14px;
+        text-align: left;
+        cursor: pointer;
+      }
+      .nav button.active { background: rgba(255,255,255,.3); }
+      .main { display: grid; gap: 16px; }
+      .toolbar {
+        position: sticky; top: 18px; z-index: 3;
+        background: rgba(255,255,255,.8);
+        backdrop-filter: blur(12px);
+        border-radius: var(--radius-lg);
+        padding: 14px 18px;
+        display: flex; justify-content: space-between; gap: 12px; align-items: center;
+        outline: 1px solid var(--outline-ghost);
+      }
+      .toolbar small { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; }
+      .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .btn { border: 0; cursor: pointer; border-radius: var(--radius-full); padding: 9px 14px; font-weight: 600; }
+      .btn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-container)); color: #fff; }
+      .btn.secondary { background: var(--surface-low); color: var(--text); }
+      .btn.tertiary { background: transparent; color: var(--primary); }
+      #import-file { display: none; }
+      .module { display: none; }
+      .module.active { display: block; }
+      .panel {
+        background: var(--surface-low);
+        border-radius: var(--radius-lg);
+        padding: 22px;
+      }
+      .panel-head { display: flex; justify-content: space-between; align-items: start; margin-bottom: 14px; }
+      .panel-head p { margin: 6px 0 0; color: var(--muted); font-size: .875rem; }
+      .grid { display: grid; gap: 14px; }
+      .grid.two { grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+      .card {
+        background: var(--surface-lowest);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        min-height: 110px;
+      }
+      .card.nested { border-radius: var(--radius-md); padding: 16px; }
+      label { display: block; margin-bottom: 6px; font-size: .6875rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; }
+      input, textarea {
+        width: 100%; border: 0; border-bottom: 1px solid rgba(199,196,215,.2); background: #f9f8f4;
+        padding: 10px 8px; color: var(--text); font: inherit; border-radius: 8px 8px 0 0;
+      }
+      input:focus, textarea:focus { outline: none; border-bottom: 2px solid var(--primary); }
+      textarea { min-height: 96px; resize: vertical; }
+      .field { margin-bottom: 12px; }
+      .list { display: grid; gap: 10px; }
+      .item { background: var(--surface-lowest); border-radius: var(--radius-md); padding: 16px; }
+      .item [contenteditable="true"] { border-radius: 6px; padding: 2px 4px; }
+      .item [contenteditable="true"]:focus { outline: 1px solid var(--outline-ghost); background: #fbfbff; }
+      .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+      .chip { background: var(--primary-fixed); border-radius: var(--radius-lg); padding: 5px 10px; font-size: .8rem; }
+      .flow { display: grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap: 12px; }
+      .flow textarea { min-height: 170px; }
+      @media (max-width: 1080px) {
+        .shell { grid-template-columns: 1fr; }
+        .sidebar { position: static; height: auto; }
+        .nav { grid-auto-flow: column; overflow: auto; }
+        .grid.two, .flow { grid-template-columns: 1fr; }
+      }
+      @media print {
+        .sidebar,.toolbar,.panel-head button,.no-print { display: none !important; }
+        .shell { display:block; padding:0; }
+        .module { display:block !important; }
+        .panel, .card, .item { background:#fff !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <h1>Mini Sprintbox</h1>
+          <p>The curated canvas</p>
+        </div>
+        <nav class="nav" id="nav"></nav>
+      </aside>
+
+      <main class="main">
+        <header class="toolbar">
+          <div>
+            <h2 id="title">Mini Sprintbox</h2>
+            <small id="status">Not saved yet</small>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="exportBtn">Export JSON</button>
+            <label class="btn secondary" for="import-file">Import JSON</label>
+            <input id="import-file" type="file" accept="application/json" />
+            <button class="btn tertiary" id="resetBtn">Reset</button>
+          </div>
+        </header>
+
+        <section id="setup" class="module"></section>
+        <section id="personas" class="module"></section>
+        <section id="interviews" class="module"></section>
+        <section id="flow" class="module"></section>
+        <section id="summary" class="module"></section>
+      </main>
+    </div>
+
+    <script>
+      const STORAGE_KEY = 'mini_sprintbox_state_v01';
+      const moduleLabels = {
+        setup: 'Sprint Setup', personas: 'Personas', interviews: 'Pre-Interview Intake',
+        flow: 'Sprint Flow Board', summary: 'Facilitator Summary'
+      };
+      const defaultState = {
+        sprint: {
+          title: 'Customer Onboarding Sprint',
+          challenge: 'Reduce first-week drop-off for new users adopting AI workflows.',
+          goal: 'Co-design 3 testable improvements for onboarding and support.',
+          date: new Date().toISOString().slice(0,10),
+          facilitator: 'Jordan Lee',
+          participants: ['Product Lead', 'CS Manager', 'Ops Analyst']
+        },
+        personas: [
+          { id: uid(), name: 'Alicia Turner', role: 'Operations Manager', pains: 'Manual status updates', goals: 'Visibility + less repetition', tools: 'Slack, Excel', ai_maturity: 'Emerging', quote: 'AI should reduce noise.', expectations: 'Fast wins with low disruption.' }
+        ],
+        interviews: [
+          { id: uid(), participant: 'Maya (Team Lead)', biggest_problem: 'Checklist fragmented', time_lost: 'Gathering context', desired_outcome: 'Single source of truth', blockers: 'No owner', risks: 'Low adoption', ideas_tried: 'Templates + reminders' }
+        ],
+        flow: {
+          current_state: ['Many docs, no sequence'],
+          pain_points: ['Slow first value realization'],
+          opportunities: ['Journey map by persona'],
+          assumptions: ['Users prefer self-serve first'],
+          ideas: ['Role-based AI starter prompts'],
+          experiments: ['A/B onboarding email']
+        },
+        meta: { version: '0.1', last_updated: '', tags: ['onboarding','AI adoption'] }
+      };
+
+      let state = load();
+      let active = 'setup';
+      let saveTimer;
+
+      const refs = {
+        nav: document.getElementById('nav'),
+        title: document.getElementById('title'),
+        status: document.getElementById('status'),
+        setup: document.getElementById('setup'),
+        personas: document.getElementById('personas'),
+        interviews: document.getElementById('interviews'),
+        flow: document.getElementById('flow'),
+        summary: document.getElementById('summary')
+      };
+
+      init();
+      function init() {
+        renderNav();
+        bindTopbar();
+        renderAll();
+      }
+      function uid(){ return (crypto.randomUUID && crypto.randomUUID()) || `${Date.now()}-${Math.random()}`; }
+      function load(){
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return structuredClone(defaultState);
+          const parsed = JSON.parse(raw);
+          return merge(parsed);
+        } catch { return structuredClone(defaultState); }
+      }
+      function merge(incoming){
+        const merged = structuredClone(defaultState);
+        merged.sprint = { ...merged.sprint, ...(incoming.sprint || {}) };
+        merged.personas = Array.isArray(incoming.personas) ? incoming.personas : merged.personas;
+        merged.interviews = Array.isArray(incoming.interviews) ? incoming.interviews : merged.interviews;
+        merged.flow = { ...merged.flow, ...(incoming.flow || {}) };
+        merged.meta = { ...merged.meta, ...(incoming.meta || {}) };
+        return merged;
+      }
+      function saveQueued(){
+        refs.status.textContent = 'Saving…';
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          state.meta.last_updated = new Date().toISOString();
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          refs.status.textContent = `Saved ${new Date(state.meta.last_updated).toLocaleString()}`;
+        }, 120);
+      }
+      function bindTopbar(){
+        document.getElementById('exportBtn').addEventListener('click', exportJSON);
+        document.getElementById('resetBtn').addEventListener('click', () => {
+          if (!confirm('Reset all local data?')) return;
+          state = structuredClone(defaultState);
+          renderAll();
+          saveQueued();
+        });
+        document.getElementById('import-file').addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const r = new FileReader();
+          r.onload = () => {
+            try { state = merge(JSON.parse(String(r.result))); renderAll(); saveQueued(); alert('Import successful.'); }
+            catch { alert('Invalid JSON.'); }
+            e.target.value = '';
+          };
+          r.readAsText(file);
+        });
+      }
+      function renderNav(){
+        refs.nav.innerHTML = Object.entries(moduleLabels)
+          .map(([k,v]) => `<button data-module="${k}" class="${k===active?'active':''}">${v}</button>`)
+          .join('');
+        refs.nav.onclick = (e) => {
+          const b = e.target.closest('button[data-module]');
+          if (!b) return;
+          active = b.dataset.module;
+          setActive();
+        };
+      }
+      function setActive(){
+        document.querySelectorAll('.module').forEach(el => el.classList.remove('active'));
+        document.getElementById(active).classList.add('active');
+        document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.module===active));
+      }
+      function renderAll(){
+        refs.title.textContent = state.sprint.title || 'Mini Sprintbox';
+        refs.status.textContent = state.meta.last_updated ? `Saved ${new Date(state.meta.last_updated).toLocaleString()}` : 'Not saved yet';
+        renderSetup(); renderPersonas(); renderInterviews(); renderFlow(); renderSummary(); renderNav(); setActive();
+      }
+      const field = (label,name,value,type='text') => `<div class="field"><label>${label}</label>${type==='textarea'?`<textarea name="${name}">${esc(value||'')}</textarea>`:`<input name="${name}" type="${type}" value="${esc(value||'')}">`}</div>`;
+
+      function renderSetup(){
+        refs.setup.innerHTML = `<div class="panel"><div class="panel-head"><div><h3>Sprint Setup</h3><p>Define context, goal, and participants.</p></div></div><div class="card"><form id="setupForm" class="grid two">${field('Sprint title','title',state.sprint.title)}${field('Challenge','challenge',state.sprint.challenge,'textarea')}${field('Goal','goal',state.sprint.goal,'textarea')}${field('Date','date',state.sprint.date,'date')}${field('Facilitator','facilitator',state.sprint.facilitator)}${field('Participants (comma separated)','participants',state.sprint.participants.join(', '),'textarea')}</form></div></div>`;
+        refs.setup.querySelector('#setupForm').oninput = (e) => {
+          const f = new FormData(e.currentTarget);
+          state.sprint.title = String(f.get('title')||'');
+          state.sprint.challenge = String(f.get('challenge')||'');
+          state.sprint.goal = String(f.get('goal')||'');
+          state.sprint.date = String(f.get('date')||'');
+          state.sprint.facilitator = String(f.get('facilitator')||'');
+          state.sprint.participants = String(f.get('participants')||'').split(',').map(v=>v.trim()).filter(Boolean);
+          refs.title.textContent = state.sprint.title || 'Mini Sprintbox';
+          renderSummary(); saveQueued();
+        };
+      }
+
+      function renderPersonas(){
+        refs.personas.innerHTML = `<div class="panel"><div class="panel-head"><div><h3>Personas</h3><p>Edit persona cards inline.</p></div><button class="btn primary" id="addPersona">+ Persona</button></div><div class="list" id="personaList"></div></div>`;
+        const list = refs.personas.querySelector('#personaList');
+        if (!state.personas.length) list.innerHTML = '<div class="card">No personas yet.</div>';
+        state.personas.forEach(p => {
+          const el = document.createElement('div');
+          el.className = 'item';
+          el.innerHTML = `<h4 contenteditable data-field="name">${esc(p.name||'Untitled')}</h4>${editable('Role','role',p.role)}${editable('Pains','pains',p.pains)}${editable('Goals','goals',p.goals)}${editable('Tools used','tools',p.tools)}${editable('AI maturity','ai_maturity',p.ai_maturity)}${editable('Quote','quote',p.quote)}${editable('Expectations','expectations',p.expectations)}<div class="no-print" style="margin-top:12px"><button class="btn tertiary" data-delete>Delete</button></div>`;
+          el.oninput = (e) => { const t=e.target; if(!t.dataset.field) return; p[t.dataset.field]=t.textContent.trim(); renderSummary(); saveQueued(); };
+          el.querySelector('[data-delete]').onclick = () => { state.personas = state.personas.filter(x=>x.id!==p.id); renderPersonas(); renderSummary(); saveQueued(); };
+          list.appendChild(el);
+        });
+        refs.personas.querySelector('#addPersona').onclick = () => {
+          state.personas.unshift({ id: uid(), name:'New Persona', role:'', pains:'', goals:'', tools:'', ai_maturity:'', quote:'', expectations:'' });
+          renderPersonas(); renderSummary(); saveQueued();
+        };
+      }
+
+      function renderInterviews(){
+        refs.interviews.innerHTML = `<div class="panel"><div class="panel-head"><div><h3>Pre-Interview Intake</h3><p>Capture interview findings quickly.</p></div><button class="btn primary" id="addInt">+ Intake</button></div><div class="list" id="intList"></div></div>`;
+        const list = refs.interviews.querySelector('#intList');
+        if (!state.interviews.length) list.innerHTML = '<div class="card">No interview entries yet.</div>';
+        state.interviews.forEach(i => {
+          const el = document.createElement('div');
+          el.className = 'item';
+          el.innerHTML = `<h4 contenteditable data-field="participant">${esc(i.participant||'Interview')}</h4>${editable('Biggest problem','biggest_problem',i.biggest_problem)}${editable('Where time is lost','time_lost',i.time_lost)}${editable('Desired outcome','desired_outcome',i.desired_outcome)}${editable('Blockers','blockers',i.blockers)}${editable('Risks','risks',i.risks)}${editable('Ideas already tried','ideas_tried',i.ideas_tried)}<div class="no-print" style="margin-top:12px"><button class="btn tertiary" data-delete>Delete</button></div>`;
+          el.oninput = (e) => { const t=e.target; if(!t.dataset.field) return; i[t.dataset.field]=t.textContent.trim(); renderSummary(); saveQueued(); };
+          el.querySelector('[data-delete]').onclick = () => { state.interviews = state.interviews.filter(x=>x.id!==i.id); renderInterviews(); renderSummary(); saveQueued(); };
+          list.appendChild(el);
+        });
+        refs.interviews.querySelector('#addInt').onclick = () => {
+          state.interviews.unshift({ id: uid(), participant:'New Participant', biggest_problem:'', time_lost:'', desired_outcome:'', blockers:'', risks:'', ideas_tried:'' });
+          renderInterviews(); renderSummary(); saveQueued();
+        };
+      }
+
+      function renderFlow(){
+        const labels = { current_state:'Current state', pain_points:'Pain points', opportunities:'Opportunities', assumptions:'Assumptions', ideas:'Ideas', experiments:'Next experiments' };
+        refs.flow.innerHTML = `<div class="panel"><div class="panel-head"><div><h3>Sprint Flow Board</h3><p>Use one line per card item.</p></div></div><div class="flow">${Object.entries(labels).map(([k,l]) => `<div class="card nested"><label>${l}</label><textarea data-key="${k}">${esc((state.flow[k]||[]).join('\n'))}</textarea></div>`).join('')}</div></div>`;
+        refs.flow.querySelectorAll('textarea[data-key]').forEach(t => t.oninput = (e) => {
+          const k = e.target.dataset.key;
+          state.flow[k] = e.target.value.split('\n').map(v=>v.trim()).filter(Boolean);
+          renderSummary(); saveQueued();
+        });
+      }
+
+      function renderSummary(){
+        refs.summary.innerHTML = `<div class="panel"><div class="panel-head"><div><h3>Facilitator Summary</h3><p>Overview + tags + print mode.</p></div><button class="btn secondary" id="printBtn">Print</button></div><div class="grid two"><div class="card"><h4>Sprint Snapshot</h4><p><strong>Challenge:</strong> ${esc(state.sprint.challenge)}</p><p><strong>Goal:</strong> ${esc(state.sprint.goal)}</p><p><strong>Date:</strong> ${esc(state.sprint.date)}</p><p><strong>Facilitator:</strong> ${esc(state.sprint.facilitator)}</p><div class="chips">${(state.sprint.participants||[]).map(p=>`<span class="chip">${esc(p)}</span>`).join('') || '<span style="color:var(--muted)">No participants</span>'}</div></div><div class="card"><h4>Totals & Tags</h4><p>Personas: ${state.personas.length}</p><p>Interviews: ${state.interviews.length}</p><p>Flow cards: ${Object.values(state.flow).reduce((a,b)=>a+b.length,0)}</p><div class="field"><label>Tags / categories</label><input id="tagsInput" value="${esc((state.meta.tags||[]).join(', '))}"></div><button class="btn primary" id="summaryExport">Export JSON</button></div></div></div>`;
+        refs.summary.querySelector('#tagsInput').oninput = (e) => { state.meta.tags = e.target.value.split(',').map(v=>v.trim()).filter(Boolean); saveQueued(); };
+        refs.summary.querySelector('#printBtn').onclick = () => window.print();
+        refs.summary.querySelector('#summaryExport').onclick = exportJSON;
+      }
+
+      function exportJSON(){
+        const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${(state.sprint.title || 'mini-sprintbox').replace(/\s+/g,'-').toLowerCase()}-snapshot.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      function editable(label,field,val){ return `<label style="margin-top:10px">${label}</label><div contenteditable data-field="${field}">${esc(val||'')}</div>`; }
+      function esc(v){ return String(v).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
+    </script>
+  </body>
+</html>
