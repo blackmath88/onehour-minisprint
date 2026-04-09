@@ -7,83 +7,74 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script src="_supabase.js"></script>
 <script>
-tailwind.config = {
-  darkMode:"class",
-  theme:{extend:{
-    colors:{
-      "background":"#faf9f5","surface-container-highest":"#e3e2df","surface-container":"#efeeea",
-      "surface-dim":"#dbdad6","surface-container-low":"#f5f4f0","on-secondary-container":"#4c4a84",
-      "secondary-container":"#c0bdff","outline":"#777586","surface":"#faf9f5",
-      "outline-variant":"#c7c4d7","on-surface-variant":"#464554","surface-variant":"#e3e2df",
-      "on-primary-fixed":"#100069","surface-container-high":"#e9e8e4","on-background":"#1b1c1a",
-      "secondary":"#5a5893","surface-container-lowest":"#ffffff","primary-fixed":"#e3dfff",
-      "primary":"#2a14b4","on-primary-fixed-variant":"#372abf","primary-fixed-dim":"#c3c0ff",
-      "on-surface":"#1b1c1a","surface-bright":"#faf9f5","on-primary":"#ffffff",
-      "primary-container":"#4338ca","surface-tint":"#5148d7","error":"#ba1a1a",
-    },
-    borderRadius:{"DEFAULT":"0.25rem","lg":"1rem","xl":"1.5rem","full":"9999px"},
-    fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Inter"],"label":["Inter"]}
-  }}
-}
+tailwind.config={darkMode:"class",theme:{extend:{colors:{
+  "background":"#faf9f5","surface-container-highest":"#e3e2df","surface-container":"#efeeea",
+  "surface-dim":"#dbdad6","surface-container-low":"#f5f4f0","on-secondary-container":"#4c4a84",
+  "secondary-container":"#c0bdff","outline":"#777586","surface":"#faf9f5",
+  "outline-variant":"#c7c4d7","on-surface-variant":"#464554","surface-variant":"#e3e2df",
+  "on-primary-fixed":"#100069","surface-container-high":"#e9e8e4","on-background":"#1b1c1a",
+  "secondary":"#5a5893","surface-container-lowest":"#ffffff","primary-fixed":"#e3dfff",
+  "primary":"#2a14b4","on-primary-fixed-variant":"#372abf","primary-fixed-dim":"#c3c0ff",
+  "on-surface":"#1b1c1a","surface-bright":"#faf9f5","on-primary":"#ffffff",
+  "primary-container":"#4338ca","surface-tint":"#5148d7","error":"#ba1a1a",
+},borderRadius:{"DEFAULT":"0.25rem","lg":"1rem","xl":"1.5rem","full":"9999px"},
+fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Inter"],"label":["Inter"]}}}}
 </script>
 <style>
   .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
   body{font-family:'Inter',sans-serif;background-color:#faf9f5;color:#1b1c1a;}
   h1,h2,h3,h4,.font-headline{font-family:'Plus Jakarta Sans',sans-serif;}
-  .view{display:none;} .view.active{display:block;}
-  textarea:focus,input:focus{outline:none;}
-  .note-textarea{background:transparent;border:none;resize:none;width:100%;font-size:0.8125rem;line-height:1.6;}
-  .note-textarea:focus{outline:none;}
-  @keyframes slidein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
-  .note-enter{animation:slidein .2s ease;}
+  .view{display:none;}.view.active{display:flex;flex-direction:column;}
+  .note-ta{background:transparent;border:none;resize:none;width:100%;font-size:.8125rem;line-height:1.6;font-family:'Inter',sans-serif;}
+  .note-ta:focus{outline:none;}
+  @keyframes nin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .nin{animation:nin .18s ease;}
 </style>
 </head>
 <body class="bg-background text-on-surface min-h-screen flex overflow-hidden">
 
 <!-- Sidebar -->
-<aside class="flex flex-col h-screen w-56 py-8 px-4 bg-surface-container-low shrink-0 sticky top-0">
-  <div class="px-2 mb-10">
+<aside class="flex flex-col h-screen w-52 py-8 px-3 bg-surface-container-low shrink-0 sticky top-0 z-30">
+  <div class="px-3 mb-8">
     <div class="flex items-center gap-2 mb-1">
-      <div class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center">
+      <div class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
         <span class="material-symbols-outlined text-white" style="font-size:14px">bolt</span>
       </div>
-      <span class="font-bold text-sm tracking-tight text-on-surface font-headline">Decision Jam</span>
+      <span class="font-bold text-sm tracking-tight font-headline">Decision Jam</span>
     </div>
-    <p class="text-[10px] text-on-surface-variant/60 ml-9">Sprint Board</p>
   </div>
-  <nav class="flex-1 space-y-1 text-sm font-medium font-headline">
-    <button onclick="gotoPhase('collect')" id="nav-collect" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
-      <span class="material-symbols-outlined text-base">sticky_note_2</span> Collect
+  <nav class="flex-1 space-y-0.5 text-sm font-medium font-headline" id="phase-nav">
+    <button onclick="gotoPhase('collect')" data-phase="collect" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">sticky_note_2</span>Collect
     </button>
-    <button onclick="gotoPhase('cluster')" id="nav-cluster" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
-      <span class="material-symbols-outlined text-base">hub</span> Cluster
+    <button onclick="gotoPhase('cluster')" data-phase="cluster" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">hub</span>Cluster
     </button>
-    <button onclick="gotoPhase('vote')" id="nav-vote" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
-      <span class="material-symbols-outlined text-base">how_to_vote</span> Vote
+    <button onclick="gotoPhase('vote')" data-phase="vote" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">how_to_vote</span>Vote
     </button>
-    <button onclick="gotoPhase('output')" id="nav-output" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
-      <span class="material-symbols-outlined text-base">summarize</span> Output
+    <button onclick="gotoPhase('output')" data-phase="output" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">summarize</span>Output
     </button>
   </nav>
-  <div class="mt-auto px-2 space-y-3">
+  <div class="mt-auto px-3 space-y-2">
     <div class="text-[10px] text-on-surface-variant/50 uppercase tracking-widest font-bold">Session</div>
-    <div class="font-mono text-lg font-bold tracking-[.15em] text-on-surface bg-surface-container rounded-lg px-3 py-2 cursor-pointer hover:bg-surface-container-high transition-colors" id="code-display" onclick="copyCode()">——</div>
-    <p class="text-[10px] text-on-surface-variant/40">Click to copy</p>
-    <a href="prep.html" class="flex items-center gap-2 text-xs text-primary font-semibold hover:underline mt-2">
-      <span class="material-symbols-outlined text-sm">open_in_new</span> Prep form
+    <div class="font-mono text-base font-bold tracking-[.12em] text-on-surface bg-surface-container rounded-lg px-3 py-2" id="code-display">——</div>
+    <div class="text-[10px] text-on-surface-variant/40" id="session-title-side"></div>
+    <a href="prep.html" class="flex items-center gap-1.5 text-xs text-primary font-semibold hover:underline mt-1">
+      <span class="material-symbols-outlined text-sm">open_in_new</span>Prep form
     </a>
   </div>
 </aside>
 
 <!-- Main -->
 <main class="flex-1 flex flex-col min-w-0 relative overflow-hidden">
-
-  <!-- Top bar -->
-  <header class="flex justify-between items-center px-8 h-16 sticky top-0 z-40 bg-[#faf9f5]/80 backdrop-blur-xl shrink-0">
+  <header class="flex justify-between items-center px-8 h-16 sticky top-0 z-40 bg-[#faf9f5]/80 backdrop-blur-xl shrink-0 border-b border-outline-variant/10">
     <div>
-      <h2 class="text-base font-black text-on-surface font-headline" id="hdr-title">Sprint Board</h2>
-      <p class="text-xs text-on-surface-variant" id="hdr-sub">Set up a session to start</p>
+      <h2 class="text-base font-black font-headline" id="hdr-title">Sprint Board</h2>
+      <p class="text-xs text-on-surface-variant" id="hdr-sub">Open or create a session to start</p>
     </div>
     <div class="flex items-center gap-3">
       <div class="flex items-center gap-1.5 text-xs text-on-surface-variant bg-surface-container-low rounded-full px-3 py-1.5">
@@ -92,69 +83,81 @@ tailwind.config = {
       </div>
       <button onclick="exportTxt()" class="text-xs font-semibold text-on-surface-variant border border-outline-variant/40 rounded-full px-4 py-1.5 hover:bg-surface-container-low transition-colors">Export</button>
       <button onclick="gotoPhase('output')" class="text-xs font-bold bg-gradient-to-br from-primary to-primary-container text-white rounded-full px-5 py-2 shadow-md shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5">
-        <span class="material-symbols-outlined text-sm">rocket_launch</span> Next step
+        <span class="material-symbols-outlined text-sm">rocket_launch</span>Next step
       </button>
     </div>
   </header>
 
-  <!-- COLLECT -->
-  <div class="view active flex-1 p-8 overflow-auto" id="view-collect">
-    <!-- Import banner -->
-    <div id="import-banner" class="hidden mb-6 bg-on-surface rounded-xl flex items-center gap-4 px-6 py-4 flex-wrap">
-      <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-        <span class="material-symbols-outlined text-white text-base">download</span>
+  <!-- No session state -->
+  <div id="no-session" class="flex-1 flex items-center justify-center p-8">
+    <div class="max-w-sm text-center">
+      <div class="w-16 h-16 rounded-2xl bg-primary-fixed flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-primary text-3xl">bolt</span>
       </div>
-      <div class="flex-1 min-w-0">
-        <p class="text-white font-bold text-sm" id="import-count">Prep responses ready</p>
-        <p class="text-white/50 text-xs truncate" id="import-names"></p>
+      <h2 class="text-2xl font-extrabold font-headline mb-3">Open a session</h2>
+      <p class="text-on-surface-variant text-sm mb-8 leading-relaxed">Enter a session code to load an existing session, or go to the prep form to create a new one.</p>
+      <div class="flex gap-3">
+        <input type="text" id="join-code" placeholder="Session code e.g. AB3XYZ" maxlength="6" class="flex-1 bg-surface-container-low border-b-2 border-outline-variant/30 rounded-t-lg px-4 py-3 text-sm font-mono uppercase tracking-widest text-center"/>
+        <button onclick="loadSession()" class="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white rounded-full text-sm font-bold hover:opacity-90 active:scale-95 transition-all">Open</button>
       </div>
-      <button onclick="importPrep()" class="bg-[#fef08a] text-yellow-900 font-bold text-sm rounded-full px-5 py-2 hover:bg-yellow-200 active:scale-95 transition-all shrink-0">
-        Import as notes →
-      </button>
-      <button onclick="document.getElementById('import-banner').classList.add('hidden')" class="text-white/40 hover:text-white text-xl leading-none">×</button>
+      <div class="mt-4">
+        <a href="prep.html" class="text-sm text-primary font-semibold hover:underline">Or create a new session in prep →</a>
+      </div>
     </div>
+  </div>
 
+  <!-- COLLECT -->
+  <div class="view flex-1 p-8 overflow-auto" id="view-collect">
     <div class="grid grid-cols-2 gap-6 max-w-4xl">
-      <!-- Forward col -->
       <div>
         <div class="flex items-center gap-2 mb-4 px-1">
           <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-          <h3 class="font-headline font-bold text-sm text-on-surface">Moving forward</h3>
+          <h3 class="font-headline font-bold text-sm">Moving forward</h3>
           <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="fwd-count">0</span>
         </div>
         <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48" id="fwd-col">
-          <button onclick="addNote('fwd')" class="w-full py-4 border-2 border-dashed border-outline-variant/40 rounded-xl flex items-center justify-center gap-2 text-outline text-sm hover:border-primary/40 hover:text-primary transition-all">
-            <span class="material-symbols-outlined">add_circle</span> Add note
+          <button onclick="addNote('fwd')" class="add-btn w-full py-4 border-2 border-dashed border-outline-variant/40 rounded-xl flex items-center justify-center gap-2 text-outline text-sm hover:border-primary/40 hover:text-primary transition-all">
+            <span class="material-symbols-outlined">add_circle</span>Add note
           </button>
         </div>
       </div>
-      <!-- Back col -->
       <div>
         <div class="flex items-center gap-2 mb-4 px-1">
           <span class="w-2 h-2 rounded-full bg-primary"></span>
-          <h3 class="font-headline font-bold text-sm text-on-surface">Holding us back</h3>
+          <h3 class="font-headline font-bold text-sm">Holding us back</h3>
           <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="back-count">0</span>
         </div>
         <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48" id="back-col">
-          <button onclick="addNote('back')" class="w-full py-4 border-2 border-dashed border-outline-variant/40 rounded-xl flex items-center justify-center gap-2 text-outline text-sm hover:border-primary/40 hover:text-primary transition-all">
-            <span class="material-symbols-outlined">add_circle</span> Add note
+          <button onclick="addNote('back')" class="add-btn w-full py-4 border-2 border-dashed border-outline-variant/40 rounded-xl flex items-center justify-center gap-2 text-outline text-sm hover:border-primary/40 hover:text-primary transition-all">
+            <span class="material-symbols-outlined">add_circle</span>Add note
           </button>
         </div>
       </div>
     </div>
-
-    <!-- Sim panel -->
+    <!-- Prep responses panel -->
+    <div id="prep-panel" class="hidden mt-8 max-w-4xl">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary text-base">download</span>
+        <h3 class="font-headline font-bold text-sm text-primary">Prep responses</h3>
+        <span class="ml-auto text-[10px] font-bold text-primary bg-primary-fixed px-2 py-0.5 rounded-full" id="prep-count">0</span>
+      </div>
+      <div class="bg-primary-fixed/40 rounded-xl p-4 space-y-2" id="prep-list"></div>
+      <button onclick="importAllPrep()" class="mt-3 py-2 px-6 bg-on-surface text-white rounded-full text-sm font-bold hover:opacity-80 active:scale-95 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">download</span>Import all as notes
+      </button>
+    </div>
+    <!-- Simulate -->
     <div class="mt-8 max-w-md">
-      <p class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-3">Simulate participant input</p>
+      <p class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-3">Add note manually</p>
       <div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
         <div class="flex gap-3 mb-3">
-          <input type="text" id="sim-name" placeholder="Name" class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-3 py-2 text-sm"/>
+          <input type="text" id="sim-name" placeholder="Author name" class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-3 py-2 text-sm"/>
           <select id="sim-col" class="bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-3 py-2 text-sm text-on-surface-variant">
             <option value="back">Holding back</option>
             <option value="fwd">Moving forward</option>
           </select>
         </div>
-        <textarea id="sim-body" placeholder="Type a note…" rows="2" class="w-full bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-3 py-2.5 text-sm text-yellow-900 resize-none mb-3"></textarea>
+        <textarea id="sim-body" placeholder="Type a note…" rows="2" class="w-full bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-3 py-2.5 text-sm text-yellow-900 resize-none mb-3 focus:outline-none"></textarea>
         <button onclick="simAdd()" class="w-full py-2 bg-on-surface text-white rounded-full text-sm font-bold hover:opacity-80 active:scale-95 transition-all">Add note</button>
       </div>
     </div>
@@ -162,20 +165,18 @@ tailwind.config = {
 
   <!-- CLUSTER -->
   <div class="view flex-1 p-8 overflow-auto" id="view-cluster">
-    <div class="max-w-5xl">
-      <!-- Theme builder -->
+    <div class="max-w-5xl w-full">
       <div class="bg-surface-container-lowest rounded-xl p-6 mb-6 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
         <div class="flex items-center gap-3 mb-4">
           <span class="material-symbols-outlined text-primary">category</span>
           <h3 class="font-headline font-bold">Themes</h3>
-          <span class="text-xs text-on-surface-variant ml-auto">Assign each note to a theme</span>
         </div>
         <div class="flex flex-wrap gap-2 mb-4" id="theme-chips"></div>
-        <div class="flex gap-3">
+        <div class="flex gap-3 items-center">
           <input type="text" id="new-theme" placeholder="New theme label…" class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm"/>
           <div class="flex gap-1.5 items-center" id="color-swatches"></div>
-          <button onclick="addTheme()" class="px-5 py-2 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-sm">add</span> Add
+          <button onclick="addTheme()" class="px-5 py-2.5 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5 shrink-0">
+            <span class="material-symbols-outlined text-sm">add</span>Add theme
           </button>
         </div>
       </div>
@@ -185,14 +186,14 @@ tailwind.config = {
             <h3 class="font-headline font-bold text-sm">Unassigned</h3>
             <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="unassigned-ct"></span>
           </div>
-          <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48 max-h-[60vh] overflow-y-auto" id="unassigned-col"></div>
+          <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48 max-h-[55vh] overflow-y-auto" id="unassigned-col"></div>
         </div>
         <div>
           <div class="flex items-center gap-2 mb-3 px-1">
             <h3 class="font-headline font-bold text-sm">Assigned</h3>
             <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="assigned-ct"></span>
           </div>
-          <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48 max-h-[60vh] overflow-y-auto" id="assigned-col"></div>
+          <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48 max-h-[55vh] overflow-y-auto" id="assigned-col"></div>
         </div>
       </div>
     </div>
@@ -200,11 +201,11 @@ tailwind.config = {
 
   <!-- VOTE -->
   <div class="view flex-1 p-8 overflow-auto" id="view-vote">
-    <div class="max-w-2xl">
+    <div class="max-w-2xl w-full">
       <div class="bg-surface-container-lowest rounded-xl p-5 mb-6 flex items-center gap-6 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
         <div>
           <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-1">Votes remaining</div>
-          <div class="text-3xl font-extrabold font-headline text-on-surface" id="votes-left">3</div>
+          <div class="text-3xl font-extrabold font-headline" id="votes-left">3</div>
         </div>
         <div class="flex-1"></div>
         <button onclick="gotoPhase('output')" class="py-2.5 px-6 bg-gradient-to-br from-primary to-primary-container text-white rounded-full text-sm font-bold shadow-md shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5">
@@ -217,77 +218,57 @@ tailwind.config = {
 
   <!-- OUTPUT -->
   <div class="view flex-1 p-8 overflow-auto" id="view-output">
-    <div class="max-w-3xl">
+    <div class="max-w-3xl w-full">
       <div class="mb-8">
         <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-primary bg-primary-fixed px-2 py-1 rounded-full mb-4 inline-block">Output</span>
-        <h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2" id="out-title">Session Output</h1>
+        <h1 class="text-4xl font-extrabold tracking-tight mb-2" id="out-title">Session Output</h1>
         <p class="text-on-surface-variant text-sm" id="out-meta"></p>
       </div>
-      <div id="themes-out" class="space-y-6 mb-8"></div>
-      <!-- Next steps -->
+      <div id="themes-out" class="space-y-5 mb-8"></div>
       <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
-        <h3 class="font-headline font-bold text-lg mb-6 flex items-center gap-2">
-          <span class="material-symbols-outlined text-primary">task_alt</span> Next steps
+        <h3 class="font-headline font-bold text-lg mb-5 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">task_alt</span>Next steps
         </h3>
         <div class="space-y-3" id="ns-list">
-          <div class="flex gap-3 items-center">
-            <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">1</div>
-            <input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>
-          </div>
-          <div class="flex gap-3 items-center">
-            <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">2</div>
-            <input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>
-          </div>
-          <div class="flex gap-3 items-center">
-            <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">3</div>
-            <input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>
-          </div>
+          <div class="flex gap-3 items-center"><div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">1</div><input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/></div>
+          <div class="flex gap-3 items-center"><div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">2</div><input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/></div>
         </div>
-        <button onclick="addNS()" class="mt-4 text-primary text-sm font-semibold hover:underline flex items-center gap-1">
-          <span class="material-symbols-outlined text-sm">add</span> Add step
-        </button>
+        <button onclick="addNS()" class="mt-4 text-primary text-sm font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">add</span>Add step</button>
       </div>
-      <div class="flex gap-3 mt-6">
-        <button onclick="exportTxt()" class="py-2.5 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-sm">download</span> Export text
-        </button>
-        <button onclick="window.print()" class="py-2.5 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
-          <span class="material-symbols-outlined text-sm">print</span> Print / PDF
-        </button>
-        <button onclick="resetAll()" class="py-2.5 px-6 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors ml-auto">
-          New session
-        </button>
+      <div class="flex gap-3 mt-6 flex-wrap">
+        <button onclick="exportTxt()" class="py-2.5 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">download</span>Export text</button>
+        <button onclick="window.print()" class="py-2.5 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5"><span class="material-symbols-outlined text-sm">print</span>Print / PDF</button>
+        <button onclick="newSession()" class="py-2.5 px-6 text-sm text-on-surface-variant hover:text-on-surface transition-colors ml-auto">New session</button>
       </div>
     </div>
   </div>
 
-  <!-- Bottom utility bar (sprint board phase only) -->
-  <div id="bottom-bar" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-xl p-1.5 rounded-full border border-outline-variant/20 shadow-2xl z-50">
+  <!-- Bottom utility bar -->
+  <div id="bottom-bar" class="absolute bottom-6 left-1/2 -translate-x-1/2 hidden items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-xl p-1.5 rounded-full border border-outline-variant/20 shadow-2xl z-50">
     <div class="flex items-center px-4 py-2 gap-2 border-r border-outline-variant/20">
       <span class="material-symbols-outlined text-primary text-sm">timer</span>
       <span class="text-sm font-bold font-headline tabular-nums" id="timer-display">00:00</span>
       <button onclick="toggleTimer()" id="timer-btn" class="ml-1 text-[10px] text-primary font-bold hover:underline">start</button>
     </div>
-    <button onclick="gotoPhase('collect')" class="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Collect</button>
-    <button onclick="gotoPhase('cluster')" class="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Cluster</button>
-    <button onclick="gotoPhase('vote')" class="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Vote</button>
+    <button onclick="gotoPhase('collect')" class="px-3 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Collect</button>
+    <button onclick="gotoPhase('cluster')" class="px-3 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Cluster</button>
+    <button onclick="gotoPhase('vote')" class="px-3 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Vote</button>
     <div class="h-5 w-px bg-outline-variant/20 mx-1"></div>
-    <button onclick="gotoPhase('output')" class="px-4 py-2 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold hover:bg-primary hover:text-white transition-all flex items-center gap-1">
-      <span class="material-symbols-outlined text-sm">present_to_all</span> Output
+    <button onclick="gotoPhase('output')" class="px-3 py-2 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold hover:bg-primary hover:text-white transition-all flex items-center gap-1">
+      <span class="material-symbols-outlined text-sm">present_to_all</span>Output
     </button>
   </div>
-
 </main>
 
-<!-- Toast -->
-<div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none"></div>
+<div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none whitespace-nowrap"></div>
 
 <script>
-let session = { title:'', challenge:'', facilitator:'', code:'', responses:[], themes:[], votes:{}, maxVotes:3 };
-let selColor = 0;
-let timerSecs = 0, timerRunning = false, timerInterval = null;
+let session = { code:'', title:'', challenge:'', facilitator:'' };
+let notes = [], themes = [], votes = {}, maxVotes = 3;
+let selColor = 0, timerSecs = 0, timerRunning = false, timerInt = null;
+let pollInt = null;
 
-const THEME_COLORS = [
+const COLORS = [
   {bg:'#EDE9FE',border:'#A78BFA',text:'#4C1D95',dot:'#7C3AED'},
   {bg:'#D1FAE5',border:'#6EE7B7',text:'#064E3B',dot:'#059669'},
   {bg:'#FEF3C7',border:'#FCD34D',text:'#78350F',dot:'#D97706'},
@@ -299,200 +280,292 @@ const THEME_COLORS = [
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = 'fixed bottom-6 right-6 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none translate-y-0 opacity-100';
-  setTimeout(() => { t.className = 'fixed bottom-6 right-6 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none translate-y-20 opacity-0'; }, 2500);
+  t.className = 'fixed bottom-6 right-6 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none translate-y-0 opacity-100 whitespace-nowrap';
+  setTimeout(()=>{ t.className='fixed bottom-6 right-6 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none translate-y-20 opacity-0 whitespace-nowrap'; },2500);
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ── Session loading ────────────────────────────────────────────────
+async function init() {
+  // Check URL param ?code=XXXXXX
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code');
+  if (code) { await loadSessionByCode(code.toUpperCase()); return; }
+  // Show no-session state
+  document.getElementById('no-session').style.display = 'flex';
 }
 
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+async function loadSession() {
+  const code = document.getElementById('join-code').value.trim().toUpperCase();
+  if (!code) { toast('Enter a session code'); return; }
+  await loadSessionByCode(code);
+}
 
-function gotoPhase(p) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-'+p).classList.add('active');
-  document.querySelectorAll('nav button[id^="nav-"]').forEach(b => {
-    b.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left';
+async function loadSessionByCode(code) {
+  try {
+    const rows = await sb.select('sessions', `code=eq.${code}`);
+    if (!rows.length) { toast('Session not found — check the code'); return; }
+    const s = rows[0];
+    session = { code: s.code, title: s.title, challenge: s.challenge, facilitator: s.facilitator };
+    document.getElementById('no-session').style.display = 'none';
+    document.getElementById('code-display').textContent = s.code;
+    document.getElementById('session-title-side').textContent = s.title;
+    document.getElementById('hdr-title').textContent = s.title;
+    document.getElementById('hdr-sub').textContent = s.challenge || '';
+    document.getElementById('bottom-bar').style.display = 'flex';
+    // Update URL cleanly
+    history.replaceState(null,'', location.pathname + '?code=' + code);
+    await loadNotes();
+    await loadThemes();
+    await loadPrepResponses();
+    gotoPhase('collect');
+    // Poll for new notes every 6s
+    if (pollInt) clearInterval(pollInt);
+    pollInt = setInterval(pollNotes, 6000);
+    toast('Session loaded: ' + s.title);
+  } catch(e) { console.error(e); toast('Error loading session'); }
+}
+
+async function loadNotes() {
+  const rows = await sb.select('notes', `session_code=eq.${session.code}&order=created_at.asc`);
+  notes = rows;
+  // Clear cols
+  ['fwd-col','back-col'].forEach(id => {
+    const col = document.getElementById(id);
+    const btn = col.querySelector('.add-btn');
+    col.innerHTML = ''; col.appendChild(btn);
   });
-  const nb = document.getElementById('nav-'+p);
-  if (nb) nb.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-lowest text-primary font-semibold shadow-sm text-left';
-  if (p === 'cluster') renderCluster();
-  if (p === 'vote') renderVote();
-  if (p === 'output') renderOutput();
-  const bb = document.getElementById('bottom-bar');
-  if (bb) bb.style.display = (p === 'output') ? 'none' : 'flex';
-}
-
-// Timer
-function toggleTimer() {
-  const btn = document.getElementById('timer-btn');
-  if (timerRunning) {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    btn.textContent = 'start';
-  } else {
-    timerInterval = setInterval(() => {
-      timerSecs++;
-      const m = String(Math.floor(timerSecs/60)).padStart(2,'0');
-      const s = String(timerSecs%60).padStart(2,'0');
-      document.getElementById('timer-display').textContent = m+':'+s;
-    }, 1000);
-    timerRunning = true;
-    btn.textContent = 'stop';
-  }
-}
-
-// Notes
-function addNote(col, body, author) {
-  const r = { id: Date.now()+Math.random(), body: body||'', author: author||'', col, themeId: null, highlighted: false };
-  session.responses.push(r);
-  renderNoteInCol(r);
+  notes.forEach(n => renderNoteInCol(n, false));
   updateCounts();
 }
 
-function renderNoteInCol(r) {
-  const col = document.getElementById(r.col+'-col');
-  const addBtn = col.querySelector('button');
+async function loadThemes() {
+  const rows = await sb.select('themes', `session_code=eq.${session.code}&order=sort_order.asc`);
+  themes = rows.map(t => ({ ...t, color: typeof t.color === 'string' ? JSON.parse(t.color) : t.color }));
+}
+
+async function loadPrepResponses() {
+  const rows = await sb.select('responses', `session_code=eq.${session.code}&order=submitted_at.asc`);
+  if (!rows.length) return;
+  document.getElementById('prep-panel').classList.remove('hidden');
+  document.getElementById('prep-count').textContent = rows.length;
+  document.getElementById('prep-list').innerHTML = rows.map(r => `
+    <div class="bg-surface-container-lowest rounded-lg p-4 flex items-start justify-between gap-3">
+      <div class="flex-1">
+        <p class="font-bold text-sm">${esc(r.name)} <span class="font-normal text-on-surface-variant">· ${esc(r.role||'')}</span></p>
+        <div class="flex flex-wrap gap-1.5 mt-2">
+          ${(r.pains||[]).map(p=>`<span class="bg-[#fef9c3] border border-[#fde047]/60 text-yellow-900 text-xs px-2 py-1 rounded-lg">${esc(p)}</span>`).join('')}
+        </div>
+      </div>
+      <button onclick="importOnePrep('${r.id}')" data-resp-id="${r.id}" class="text-xs text-primary font-semibold hover:underline shrink-0 mt-1">Import</button>
+    </div>`).join('');
+  window._prepRows = rows;
+}
+
+async function pollNotes() {
+  if (!session.code) return;
+  try {
+    const rows = await sb.select('notes', `session_code=eq.${session.code}&order=created_at.asc`);
+    const existingIds = notes.map(n=>n.id);
+    const newNotes = rows.filter(n => !existingIds.includes(n.id));
+    newNotes.forEach(n => { notes.push(n); renderNoteInCol(n, true); });
+    if (newNotes.length) { updateCounts(); toast(newNotes.length + ' new note(s)'); }
+    // update vote counts
+    rows.forEach(n => {
+      const existing = notes.find(x=>x.id===n.id);
+      if (existing) existing.vote_count = n.vote_count;
+    });
+  } catch(e) {}
+}
+
+// ── Notes ──────────────────────────────────────────────────────────
+async function addNote(col, body, author) {
+  if (!session.code) { toast('Load a session first'); return; }
+  try {
+    const rows = await sb.insert('notes', { session_code: session.code, body: body||'', author: author||'', col });
+    const note = rows[0];
+    notes.push(note);
+    renderNoteInCol(note, true);
+    updateCounts();
+    return note;
+  } catch(e) { console.error(e); toast('Error saving note'); }
+}
+
+function renderNoteInCol(n, animate) {
+  const col = document.getElementById(n.col+'-col');
+  if (!col) return;
+  const btn = col.querySelector('.add-btn');
   const div = document.createElement('div');
-  div.id = 'note-'+r.id;
-  div.className = 'note-enter bg-surface-container-lowest rounded-xl p-4 shadow-[0px_4px_16px_rgba(27,28,26,0.05)] border border-transparent hover:border-primary/20 transition-all';
+  div.id = 'note-'+n.id;
+  if (animate) div.className = 'nin';
+  div.className = (div.className||'') + ' bg-surface-container-lowest rounded-xl p-4 shadow-[0px_4px_16px_rgba(27,28,26,0.05)] border border-transparent hover:border-primary/20 transition-all';
   div.innerHTML = `
-    <textarea class="note-textarea text-on-surface" rows="2" placeholder="Type your note…" onchange="updateNote('${r.id}', this.value)">${esc(r.body)}</textarea>
+    <textarea class="note-ta" rows="2" placeholder="Type your note…" onblur="saveNote('${n.id}',this.value)">${esc(n.body)}</textarea>
     <div class="flex items-center gap-2 mt-2">
-      ${r.author ? `<span class="text-[10px] text-on-surface-variant/60 font-medium">${esc(r.author)}</span>` : ''}
-      <button onclick="deleteNote('${r.id}')" class="ml-auto text-on-surface-variant/30 hover:text-error transition-colors">
+      ${n.author?`<span class="text-[10px] text-on-surface-variant/50 font-medium">${esc(n.author)}</span>`:''}
+      <button onclick="deleteNote('${n.id}')" class="ml-auto text-on-surface-variant/30 hover:text-error transition-colors">
         <span class="material-symbols-outlined text-sm">close</span>
       </button>
     </div>`;
-  col.insertBefore(div, addBtn);
-  const ta = div.querySelector('textarea');
-  if (!r.body) setTimeout(() => ta.focus(), 50);
+  col.insertBefore(div, btn);
+  if (animate && !n.body) setTimeout(()=>div.querySelector('textarea').focus(),50);
 }
 
-function updateNote(id, val) {
-  const r = session.responses.find(x => x.id == id);
-  if (r) r.body = val;
+async function saveNote(id, val) {
+  const n = notes.find(x=>x.id===id);
+  if (!n || n.body === val) return;
+  n.body = val;
+  try { await sb.update('notes', `id=eq.${id}`, { body: val }); }
+  catch(e) { console.warn('Note save failed', e); }
   updateCounts();
 }
 
-function deleteNote(id) {
-  session.responses = session.responses.filter(x => x.id != id);
+async function deleteNote(id) {
+  notes = notes.filter(x=>x.id!==id);
   const el = document.getElementById('note-'+id);
   if (el) el.remove();
   updateCounts();
+  try { await sb.delete('notes', `id=eq.${id}`); }
+  catch(e) { console.warn('Note delete failed', e); }
 }
 
 function updateCounts() {
-  const fwd = session.responses.filter(r => r.col === 'fwd').length;
-  const back = session.responses.filter(r => r.col === 'back').length;
+  const fwd = notes.filter(n=>n.col==='fwd'&&n.body.trim()).length;
+  const back = notes.filter(n=>n.col==='back'&&n.body.trim()).length;
   document.getElementById('fwd-count').textContent = fwd;
   document.getElementById('back-count').textContent = back;
-  document.getElementById('note-count').textContent = (fwd+back) + ' notes';
+  document.getElementById('note-count').textContent = (fwd+back)+' notes';
 }
 
-function simAdd() {
+async function simAdd() {
   const body = document.getElementById('sim-body').value.trim();
-  const name = document.getElementById('sim-name').value.trim() || 'Participant';
+  const name = document.getElementById('sim-name').value.trim()||'Facilitator';
   const col = document.getElementById('sim-col').value;
   if (!body) { toast('Write something first'); return; }
-  addNote(col, body, name);
+  await addNote(col, body, name);
   document.getElementById('sim-body').value = '';
-  toast('Note added by ' + name);
+  toast('Note added');
 }
 
-// Themes
+// ── Prep import ────────────────────────────────────────────────────
+async function importOnePrep(respId) {
+  const r = (window._prepRows||[]).find(x=>x.id===respId);
+  if (!r) return;
+  for (const pain of (r.pains||[])) {
+    if (pain.trim()) await addNote('back', pain.trim(), r.name+(r.role?' · '+r.role:''));
+  }
+  if (r.change?.trim()) await addNote('back', r.change.trim(), r.name+' [change]');
+  document.querySelector(`[data-resp-id="${respId}"]`).textContent = 'Imported ✓';
+  toast('Imported ' + r.name);
+}
+
+async function importAllPrep() {
+  for (const r of (window._prepRows||[])) { await importOnePrep(r.id); }
+  toast('All prep responses imported');
+}
+
+// ── Themes ─────────────────────────────────────────────────────────
 function renderSwatches() {
-  const c = document.getElementById('color-swatches');
-  c.innerHTML = THEME_COLORS.map((col, i) =>
-    `<div onclick="selColor=${i};renderSwatches()" class="w-5 h-5 rounded-full cursor-pointer transition-all ${i===selColor?'ring-2 ring-offset-1 ring-on-surface scale-110':''}" style="background:${col.bg};border:1.5px solid ${col.border}"></div>`
+  document.getElementById('color-swatches').innerHTML = COLORS.map((c,i)=>
+    `<div onclick="selColor=${i};renderSwatches()" class="w-5 h-5 rounded-full cursor-pointer transition-all ${i===selColor?'ring-2 ring-offset-1 ring-on-surface scale-110':''}" style="background:${c.bg};border:1.5px solid ${c.border}"></div>`
   ).join('');
 }
 
-function addTheme() {
+async function addTheme() {
   const label = document.getElementById('new-theme').value.trim();
   if (!label) { toast('Enter a theme name'); return; }
-  const color = THEME_COLORS[selColor % THEME_COLORS.length];
-  session.themes.push({ id: Date.now(), label, color });
-  document.getElementById('new-theme').value = '';
-  selColor = (selColor + 1) % THEME_COLORS.length;
-  renderSwatches();
-  renderThemeChips();
-  renderCluster();
-  toast('Theme added: ' + label);
+  const color = COLORS[selColor];
+  try {
+    const rows = await sb.insert('themes', { session_code: session.code, label, color: JSON.stringify(color), sort_order: themes.length });
+    themes.push({ ...rows[0], color });
+    document.getElementById('new-theme').value = '';
+    selColor = (selColor+1)%COLORS.length;
+    renderSwatches();
+    renderThemeChips();
+    renderCluster();
+    toast('Theme added: ' + label);
+  } catch(e) { toast('Error saving theme'); }
 }
 
 function renderThemeChips() {
   const el = document.getElementById('theme-chips');
-  if (!session.themes.length) { el.innerHTML = '<span class="text-xs text-on-surface-variant/50">No themes yet</span>'; return; }
-  el.innerHTML = session.themes.map(t =>
-    `<div class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:${t.color.bg};color:${t.color.text};border:1px solid ${t.color.border}">
-      <span class="w-1.5 h-1.5 rounded-full" style="background:${t.color.dot}"></span>
-      ${esc(t.label)}
-    </div>`
-  ).join('');
+  if (!themes.length) { el.innerHTML='<span class="text-xs text-on-surface-variant/50">No themes yet</span>'; return; }
+  el.innerHTML = themes.map(t=>`
+    <div class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:${t.color.bg};color:${t.color.text};border:1px solid ${t.color.border}">
+      <span class="w-1.5 h-1.5 rounded-full" style="background:${t.color.dot}"></span>${esc(t.label)}
+    </div>`).join('');
 }
 
 function renderCluster() {
-  renderSwatches();
-  renderThemeChips();
-  const unassigned = session.responses.filter(r => !r.themeId && r.body.trim());
-  const assigned = session.responses.filter(r => r.themeId && r.body.trim());
-  document.getElementById('unassigned-ct').textContent = unassigned.length + ' left';
-  document.getElementById('assigned-ct').textContent = assigned.length + ' done';
-  const opts = session.themes.length
-    ? '<option value="">— unassigned —</option>' + session.themes.map(t => `<option value="${t.id}">${t.label}</option>`).join('')
+  renderSwatches(); renderThemeChips();
+  const filled = notes.filter(n=>n.body.trim());
+  const unassigned = filled.filter(n=>!n.theme_id);
+  const assigned = filled.filter(n=>n.theme_id);
+  document.getElementById('unassigned-ct').textContent = unassigned.length+' left';
+  document.getElementById('assigned-ct').textContent = assigned.length+' done';
+  const opts = themes.length
+    ? '<option value="">— unassigned —</option>'+themes.map(t=>`<option value="${t.id}">${t.label}</option>`).join('')
     : '<option value="">Add themes above first</option>';
   document.getElementById('unassigned-col').innerHTML = unassigned.length
-    ? unassigned.map(r => clusterCard(r, opts)).join('')
+    ? unassigned.map(n=>clusterCard(n,opts)).join('')
     : '<div class="text-center py-8 text-on-surface-variant/40 text-sm">All notes assigned!</div>';
   document.getElementById('assigned-col').innerHTML = assigned.length
-    ? assigned.map(r => { const t = session.themes.find(x => x.id == r.themeId); return clusterCard(r, opts, t); }).join('')
+    ? assigned.map(n=>{const t=themes.find(x=>x.id===n.theme_id);return clusterCard(n,opts,t);}).join('')
     : '<div class="text-center py-8 text-on-surface-variant/40 text-sm">Assign notes from the left</div>';
 }
 
-function clusterCard(r, opts, theme) {
-  const borderStyle = theme ? `border-l-4;border-color:${theme.color.dot}` : '';
-  return `<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_4px_16px_rgba(27,28,26,0.04)] ${theme ? 'border-l-4' : ''}" ${theme ? `style="border-color:${theme.color.dot}"` : ''}>
-    <p class="text-sm text-on-surface leading-relaxed mb-3">${esc(r.body)}</p>
+function clusterCard(n, opts, theme) {
+  return `<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_4px_16px_rgba(27,28,26,0.04)] ${theme?'border-l-4':''}" ${theme?`style="border-color:${theme.color.dot}"`:''}">
+    <p class="text-sm text-on-surface leading-relaxed mb-3">${esc(n.body)}</p>
     <div class="flex items-center gap-2">
-      ${r.author ? `<span class="text-[10px] text-on-surface-variant/50">${esc(r.author)}</span>` : ''}
-      <select onchange="assignTheme('${r.id}',this.value)" class="ml-auto bg-surface-container-low text-xs text-on-surface-variant border-none rounded-full px-3 py-1 cursor-pointer">
-        ${opts.replace(`value="${r.themeId||''}"`,`value="${r.themeId||''}" selected`)}
+      ${n.author?`<span class="text-[10px] text-on-surface-variant/50">${esc(n.author)}</span>`:''}
+      <select onchange="assignTheme('${n.id}',this.value)" class="ml-auto bg-surface-container-low text-xs text-on-surface-variant border-none rounded-full px-3 py-1 cursor-pointer">
+        ${opts.replace(`value="${n.theme_id||''}"`,`value="${n.theme_id||''}" selected`)}
       </select>
-      <button onclick="toggleHL('${r.id}')" class="text-on-surface-variant/40 hover:text-amber-500 transition-colors">
-        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' ${r.highlighted?1:0}">star</span>
+      <button onclick="toggleHL('${n.id}')" class="text-on-surface-variant/40 hover:text-amber-500 transition-colors">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' ${n.highlighted?1:0}">star</span>
       </button>
     </div>
   </div>`;
 }
 
-function assignTheme(id, themeId) {
-  const r = session.responses.find(x => x.id == id);
-  if (r) { r.themeId = themeId ? parseInt(themeId) : null; renderCluster(); }
+async function assignTheme(id, themeId) {
+  const n = notes.find(x=>x.id===id);
+  if (!n) return;
+  n.theme_id = themeId||null;
+  renderCluster();
+  try { await sb.update('notes', `id=eq.${id}`, { theme_id: themeId||null }); }
+  catch(e) { console.warn('Theme assign failed', e); }
 }
 
-function toggleHL(id) {
-  const r = session.responses.find(x => x.id == id);
-  if (r) { r.highlighted = !r.highlighted; renderCluster(); }
+async function toggleHL(id) {
+  const n = notes.find(x=>x.id===id);
+  if (!n) return;
+  n.highlighted = !n.highlighted;
+  renderCluster();
+  try { await sb.update('notes', `id=eq.${id}`, { highlighted: n.highlighted }); }
+  catch(e) {}
 }
 
-// Vote
+// ── Vote ───────────────────────────────────────────────────────────
 function renderVote() {
-  const used = Object.keys(session.votes).length;
-  const left = session.maxVotes - used;
-  document.getElementById('votes-left').textContent = left < 0 ? 0 : left;
-  const sorted = session.responses.filter(r => r.body.trim()).sort((a,b) => countVotes(b.id) - countVotes(a.id));
-  document.getElementById('vote-list').innerHTML = sorted.map(r => {
-    const t = session.themes.find(x => x.id == r.themeId);
-    const vc = countVotes(r.id);
-    const myVote = session.votes[r.id];
-    const canVote = !myVote && left > 0;
+  const used = Object.keys(votes).length;
+  document.getElementById('votes-left').textContent = Math.max(0, maxVotes-used);
+  const sorted = notes.filter(n=>n.body.trim()).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0));
+  document.getElementById('vote-list').innerHTML = sorted.map(n=>{
+    const t = themes.find(x=>x.id===n.theme_id);
+    const vc = n.vote_count||0;
+    const myVote = votes[n.id];
+    const canVote = !myVote && used < maxVotes;
     return `<div class="bg-surface-container-lowest rounded-xl p-5 flex gap-4 items-start shadow-[0px_4px_16px_rgba(27,28,26,0.04)] ${myVote?'border border-primary/30':''}">
-      <button onclick="castVote('${r.id}')" ${!canVote&&!myVote?'disabled':''} class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all shrink-0 ${myVote?'bg-primary border-primary text-white':'border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary'} ${!canVote&&!myVote?'opacity-30 cursor-not-allowed':'cursor-pointer'}">
+      <button onclick="castVote('${n.id}')" ${!canVote&&!myVote?'disabled':''} class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all shrink-0 ${myVote?'bg-primary border-primary text-white':'border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary'} ${!canVote&&!myVote?'opacity-30 cursor-not-allowed':'cursor-pointer'}">
         ${myVote?'✓':'+'}
       </button>
       <div class="flex-1 min-w-0">
-        <p class="text-sm text-on-surface leading-relaxed mb-2">${esc(r.body)}</p>
+        <p class="text-sm leading-relaxed mb-2">${esc(n.body)}</p>
         <div class="flex items-center gap-2 flex-wrap">
-          ${r.author ? `<span class="text-[10px] text-on-surface-variant/50">${esc(r.author)}</span>` : ''}
-          ${t ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:${t.color.bg};color:${t.color.text}">${esc(t.label)}</span>` : ''}
+          ${n.author?`<span class="text-[10px] text-on-surface-variant/50">${esc(n.author)}</span>`:''}
+          ${t?`<span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:${t.color.bg};color:${t.color.text}">${esc(t.label)}</span>`:''}
         </div>
       </div>
       <div class="text-lg font-extrabold font-headline text-on-surface/30 shrink-0 pt-1">${vc||''}</div>
@@ -500,88 +573,100 @@ function renderVote() {
   }).join('');
 }
 
-function countVotes(id) { return Object.values(session.votes).filter(v => v == id).length; }
-
-function castVote(id) {
-  if (session.votes[id]) { delete session.votes[id]; }
-  else {
-    const used = Object.keys(session.votes).length;
-    if (used >= session.maxVotes) { toast('No votes left'); return; }
-    session.votes['v_'+id+'_'+Date.now()] = id;
+async function castVote(id) {
+  const used = Object.keys(votes).length;
+  if (votes[id]) {
+    delete votes[id];
+    const n = notes.find(x=>x.id===id);
+    if (n) { n.vote_count = Math.max(0,(n.vote_count||1)-1); await sb.update('notes',`id=eq.${id}`,{vote_count:n.vote_count}); }
+  } else {
+    if (used >= maxVotes) { toast('No votes left'); return; }
+    votes[id] = true;
+    const n = notes.find(x=>x.id===id);
+    if (n) { n.vote_count = (n.vote_count||0)+1; await sb.update('notes',`id=eq.${id}`,{vote_count:n.vote_count}); }
   }
   renderVote();
 }
 
-// Output
+// ── Output ─────────────────────────────────────────────────────────
 function renderOutput() {
-  document.getElementById('out-title').textContent = session.title || 'Session Output';
+  document.getElementById('out-title').textContent = session.title||'Session Output';
   document.getElementById('out-meta').textContent =
     new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) +
-    (session.facilitator ? ' · ' + session.facilitator : '') +
-    ' · ' + session.responses.filter(r=>r.body.trim()).length + ' notes';
-  const voteCounts = {};
-  session.responses.forEach(r => { voteCounts[r.id] = countVotes(r.id); });
+    (session.facilitator?' · '+session.facilitator:'') +
+    ' · ' + notes.filter(n=>n.body.trim()).length + ' notes';
+  const usedThemes = themes.filter(t=>notes.some(n=>n.theme_id===t.id&&n.body.trim()));
   let html = '';
-  const usedThemes = session.themes.filter(t => session.responses.some(r => r.themeId == t.id && r.body.trim()));
-  usedThemes.forEach(t => {
-    const notes = session.responses.filter(r => r.themeId == t.id && r.body.trim())
-      .sort((a,b) => (voteCounts[b.id]||0)-(voteCounts[a.id]||0));
-    const totalVotes = notes.reduce((s,r)=>s+(voteCounts[r.id]||0),0);
-    html += `<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+  usedThemes.forEach(t=>{
+    const tNotes = notes.filter(n=>n.theme_id===t.id&&n.body.trim()).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0));
+    const totalVotes = tNotes.reduce((s,n)=>s+(n.vote_count||0),0);
+    html+=`<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
       <div class="px-6 py-4 flex items-center gap-3" style="background:${t.color.bg}">
         <span class="w-3 h-3 rounded-full" style="background:${t.color.dot}"></span>
-        <span class="font-headline font-bold text-base" style="color:${t.color.text}">${esc(t.label)}</span>
-        <span class="ml-auto text-xs font-bold" style="color:${t.color.text};opacity:.6">${notes.length} notes · ${totalVotes} votes</span>
+        <span class="font-headline font-bold" style="color:${t.color.text}">${esc(t.label)}</span>
+        <span class="ml-auto text-xs font-bold opacity-60" style="color:${t.color.text}">${tNotes.length} notes · ${totalVotes} votes</span>
       </div>
       <div class="divide-y divide-outline-variant/10">
-        ${notes.map((r,i) => `<div class="flex gap-4 items-start px-6 py-4 ${i===0&&(voteCounts[r.id]||0)>0?'bg-primary-fixed/20':''}">
-          <div class="w-6 text-right font-mono text-xs font-bold text-on-surface-variant/40 pt-0.5 shrink-0">${voteCounts[r.id]||''}</div>
-          <p class="text-sm text-on-surface leading-relaxed flex-1 ${i===0&&(voteCounts[r.id]||0)>0?'font-semibold':''}">${esc(r.body)}</p>
-          ${r.highlighted ? '<span class="material-symbols-outlined text-amber-500 text-sm shrink-0" style="font-variation-settings:\'FILL\' 1">star</span>' : ''}
-          ${r.author ? `<span class="text-[10px] text-on-surface-variant/40 shrink-0">${esc(r.author)}</span>` : ''}
+        ${tNotes.map((n,i)=>`<div class="flex gap-4 items-start px-6 py-4 ${i===0&&(n.vote_count||0)>0?'bg-primary-fixed/20':''}">
+          <div class="w-6 text-right font-mono text-xs font-bold text-on-surface-variant/40 pt-0.5 shrink-0">${n.vote_count||''}</div>
+          <p class="text-sm leading-relaxed flex-1 ${i===0&&(n.vote_count||0)>0?'font-semibold':''}">${esc(n.body)}</p>
+          ${n.highlighted?'<span class="material-symbols-outlined text-amber-500 text-sm shrink-0" style="font-variation-settings:\'FILL\' 1">star</span>':''}
+          ${n.author?`<span class="text-[10px] text-on-surface-variant/40 shrink-0">${esc(n.author)}</span>`:''}
         </div>`).join('')}
       </div>
     </div>`;
   });
-  const unthemed = session.responses.filter(r => !r.themeId && r.body.trim()).sort((a,b)=>(voteCounts[b.id]||0)-(voteCounts[a.id]||0));
+  const unthemed = notes.filter(n=>!n.theme_id&&n.body.trim()).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0));
   if (unthemed.length) {
-    html += `<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
-      <div class="px-6 py-4 bg-surface-container-low"><span class="font-headline font-bold text-base text-on-surface-variant">Unclustered</span></div>
+    html+=`<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+      <div class="px-6 py-4 bg-surface-container-low"><span class="font-headline font-bold text-on-surface-variant">Unclustered</span></div>
       <div class="divide-y divide-outline-variant/10">
-        ${unthemed.map(r=>`<div class="flex gap-4 items-start px-6 py-4">
-          <div class="w-6 text-right font-mono text-xs font-bold text-on-surface-variant/40 pt-0.5 shrink-0">${voteCounts[r.id]||''}</div>
-          <p class="text-sm text-on-surface leading-relaxed flex-1">${esc(r.body)}</p>
+        ${unthemed.map(n=>`<div class="flex gap-4 items-start px-6 py-4">
+          <div class="w-6 text-right font-mono text-xs font-bold text-on-surface-variant/40 pt-0.5 shrink-0">${n.vote_count||''}</div>
+          <p class="text-sm leading-relaxed flex-1">${esc(n.body)}</p>
         </div>`).join('')}
       </div>
     </div>`;
   }
-  if (!html) html = '<div class="text-center py-12 text-on-surface-variant/40">No notes yet — go collect some!</div>';
+  if (!html) html='<div class="text-center py-12 text-on-surface-variant/40">No notes yet</div>';
   document.getElementById('themes-out').innerHTML = html;
+}
+
+// ── Navigation ─────────────────────────────────────────────────────
+function gotoPhase(p) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+p).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    b.className='nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left';
+  });
+  const nb = document.querySelector(`[data-phase="${p}"]`);
+  if (nb) nb.className='nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-lowest text-primary font-semibold shadow-sm text-left';
+  if (p==='cluster') renderCluster();
+  if (p==='vote') renderVote();
+  if (p==='output') renderOutput();
 }
 
 function addNS() {
   const list = document.getElementById('ns-list');
-  const n = list.children.length + 1;
-  const div = document.createElement('div');
-  div.className = 'flex gap-3 items-center';
-  div.innerHTML = `<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">${n}</div><input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>`;
-  list.appendChild(div);
+  const n = list.children.length+1;
+  const d = document.createElement('div');
+  d.className='flex gap-3 items-center';
+  d.innerHTML=`<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">${n}</div><input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>`;
+  list.appendChild(d);
 }
 
 function exportTxt() {
-  const voteCounts = {};
-  session.responses.forEach(r => { voteCounts[r.id] = countVotes(r.id); });
   let out = `DECISION JAM — ${session.title||'Session'}\n`;
   out += `${new Date().toLocaleDateString()} · ${session.facilitator||''}\n\n`;
   if (session.challenge) out += `Challenge: ${session.challenge}\n\n`;
-  session.themes.forEach(t => {
-    const notes = session.responses.filter(r=>r.themeId==t.id&&r.body.trim()).sort((a,b)=>(voteCounts[b.id]||0)-(voteCounts[a.id]||0));
-    out += `## ${t.label}\n`;
-    notes.forEach(r => out += `  [${voteCounts[r.id]||0}] ${r.body}${r.author?' ('+r.author+')':''}\n`);
-    out += '\n';
+  themes.forEach(t=>{
+    const tNotes = notes.filter(n=>n.theme_id===t.id&&n.body.trim()).sort((a,b)=>(b.vote_count||0)-(a.vote_count||0));
+    out+=`## ${t.label}\n`;
+    tNotes.forEach(n=>out+=`  [${n.vote_count||0}] ${n.body}${n.author?' ('+n.author+')':''}\n`);
+    out+='\n';
   });
   const ns = [...document.querySelectorAll('#ns-list input')].map(i=>i.value.trim()).filter(Boolean);
-  if (ns.length) { out += '## Next steps\n'; ns.forEach((s,i) => out += `  ${i+1}. ${s}\n`); }
+  if (ns.length) { out+='## Next steps\n'; ns.forEach((s,i)=>out+=`  ${i+1}. ${s}\n`); }
   const blob = new Blob([out],{type:'text/plain'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -590,79 +675,29 @@ function exportTxt() {
   toast('Exported!');
 }
 
-function copyCode() {
-  if (!session.code) return;
-  navigator.clipboard.writeText(session.code).catch(()=>{});
-  toast('Code copied: ' + session.code);
-}
-
-function resetAll() {
-  if (!confirm('Start a new session? All data will be cleared.')) return;
-  session = { title:'', challenge:'', facilitator:'', code:'', responses:[], themes:[], votes:{}, maxVotes:3 };
-  ['fwd-col','back-col'].forEach(id => {
-    const col = document.getElementById(id);
-    const btn = col.querySelector('button');
-    col.innerHTML = '';
-    col.appendChild(btn);
-  });
-  updateCounts();
-  document.getElementById('hdr-title').textContent = 'Sprint Board';
-  document.getElementById('hdr-sub').textContent = 'Set up a session to start';
-  document.getElementById('code-display').textContent = '——';
-  gotoPhase('collect');
-  toast('Session cleared');
-}
-
-// Import from prep
-function checkImport() {
-  const hash = location.hash;
-  if (!hash.startsWith('#import=')) return;
-  const raw = hash.replace('#import=','');
+function newSession() {
+  if (!confirm('Leave this session and start fresh?')) return;
   history.replaceState(null,'',location.pathname);
-  try {
-    let jsonStr;
-    try { jsonStr = decodeURIComponent(escape(atob(raw))); }
-    catch(e1) { jsonStr = atob(raw); }
-    const payload = JSON.parse(jsonStr);
-    window._prep = payload;
-    const resps = payload.responses || [];
-    const n = resps.length;
-    document.getElementById('import-count').textContent = n > 0
-      ? n + ' prep response' + (n!==1?'s':'') + ' ready to import'
-      : 'Session ready — no prep responses yet';
-    document.getElementById('import-names').textContent = resps.map(r=>r.name).filter(Boolean).join(', ');
-    document.getElementById('import-banner').classList.remove('hidden');
-  } catch(e) {
-    console.warn('Import parse failed. Raw:', raw.substring(0,80), e);
-    toast('Import link unreadable — copy the board link again from prep');
+  location.reload();
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timer-btn');
+  if (timerRunning) {
+    clearInterval(timerInt); timerRunning=false; btn.textContent='start';
+  } else {
+    timerInt = setInterval(()=>{
+      timerSecs++;
+      const m=String(Math.floor(timerSecs/60)).padStart(2,'0');
+      const s=String(timerSecs%60).padStart(2,'0');
+      document.getElementById('timer-display').textContent=m+':'+s;
+    },1000);
+    timerRunning=true; btn.textContent='stop';
   }
 }
 
-function importPrep() {
-  const p = window._prep;
-  if (!p) return;
-  session.title = p.title || session.title;
-  session.challenge = p.challenge || session.challenge;
-  session.facilitator = p.facilitator || session.facilitator;
-  if (session.title) {
-    document.getElementById('hdr-title').textContent = session.title;
-    document.getElementById('hdr-sub').textContent = session.challenge || '';
-    document.getElementById('code-display').textContent = 'PREP';
-  }
-  const resps = p.responses || [];
-  resps.forEach(r => {
-    (r.pains || []).forEach(pain => { if (pain && pain.trim()) addNote('back', pain.trim(), r.name + (r.role ? ' · '+r.role : '')); });
-    if (r.change && r.change.trim()) addNote('back', r.change.trim(), r.name + ' [change]');
-  });
-  document.getElementById('import-banner').classList.add('hidden');
-  window._prep = null;
-  toast('Imported ' + session.responses.length + ' notes from prep');
-}
-
-// Init
 renderSwatches();
-checkImport();
-gotoPhase('collect');
+init();
 </script>
 </body>
 </html>
