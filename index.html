@@ -1,0 +1,75 @@
+<!doctype html>
+<!--
+Mini Sprintbox (Static Prototype)
+
+README (quick start)
+1) Run locally:
+   - Open this folder and double-click index.html, or serve with any static server:
+     python3 -m http.server 8080
+   - Visit http://localhost:8080
+
+2) Deploy to Azure Static Web Apps:
+   - Push these files to a GitHub repository.
+   - In Azure Portal, create a Static Web App and connect to the repo.
+   - Build preset: Custom. Since this is static, app location = "/", output location = "/".
+   - No build command is required.
+   - After deployment, your app is served as a static site.
+
+3) Embed in Squarespace (hosted externally):
+   - Host this app (Azure Static Web Apps URL, or custom domain).
+   - In Squarespace, add a Code Block and paste:
+     <iframe src="https://YOUR-HOSTED-APP-URL" width="100%" height="900" style="border:0;border-radius:12px;"></iframe>
+   - Optionally adjust height for your page layout.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Sprintbox</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <h1>Mini Sprintbox</h1>
+          <p>Facilitation cockpit</p>
+        </div>
+        <nav id="sidebar-nav" aria-label="Module navigation">
+          <button class="nav-btn active" data-module="setup">Sprint Setup</button>
+          <button class="nav-btn" data-module="personas">Personas</button>
+          <button class="nav-btn" data-module="interviews">Pre-Interview Intake</button>
+          <button class="nav-btn" data-module="flow">Sprint Flow Board</button>
+          <button class="nav-btn" data-module="summary">Facilitator Summary</button>
+        </nav>
+      </aside>
+
+      <main class="main-area">
+        <header class="toolbar">
+          <div class="toolbar-title-wrap">
+            <h2 id="toolbar-title">Mini Sprintbox</h2>
+            <small id="save-status">Not saved yet</small>
+          </div>
+          <div class="toolbar-actions">
+            <button id="export-json-btn">Export JSON</button>
+            <label class="import-label" for="import-json-input">Import JSON</label>
+            <input id="import-json-input" type="file" accept="application/json" />
+            <button id="reset-btn" class="danger">Reset</button>
+          </div>
+        </header>
+
+        <section id="module-setup" class="module-section active"></section>
+        <section id="module-personas" class="module-section"></section>
+        <section id="module-interviews" class="module-section"></section>
+        <section id="module-flow" class="module-section"></section>
+        <section id="module-summary" class="module-section"></section>
+      </main>
+    </div>
+
+    <template id="card-template">
+      <article class="card"></article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
