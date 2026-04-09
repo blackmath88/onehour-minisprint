@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sprint Board | Decision Jam</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+tailwind.config = {
+  darkMode:"class",
+  theme:{extend:{
+    colors:{
+      "background":"#faf9f5","surface-container-highest":"#e3e2df","surface-container":"#efeeea",
+      "surface-dim":"#dbdad6","surface-container-low":"#f5f4f0","on-secondary-container":"#4c4a84",
+      "secondary-container":"#c0bdff","outline":"#777586","surface":"#faf9f5",
+      "outline-variant":"#c7c4d7","on-surface-variant":"#464554","surface-variant":"#e3e2df",
+      "on-primary-fixed":"#100069","surface-container-high":"#e9e8e4","on-background":"#1b1c1a",
+      "secondary":"#5a5893","surface-container-lowest":"#ffffff","primary-fixed":"#e3dfff",
+      "primary":"#2a14b4","on-primary-fixed-variant":"#372abf","primary-fixed-dim":"#c3c0ff",
+      "on-surface":"#1b1c1a","surface-bright":"#faf9f5","on-primary":"#ffffff",
+      "primary-container":"#4338ca","surface-tint":"#5148d7","error":"#ba1a1a",
+    },
+    borderRadius:{"DEFAULT":"0.25rem","lg":"1rem","xl":"1.5rem","full":"9999px"},
+    fontFamily:{"headline":["Plus Jakarta Sans"],"body":["Inter"],"label":["Inter"]}
+  }}
+}
+</script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+  body{font-family:'Inter',sans-serif;background-color:#faf9f5;color:#1b1c1a;}
+  h1,h2,h3,h4,.font-headline{font-family:'Plus Jakarta Sans',sans-serif;}
+  .view{display:none;} .view.active{display:block;}
+  textarea:focus,input:focus{outline:none;}
+  .note-textarea{background:transparent;border:none;resize:none;width:100%;font-size:0.8125rem;line-height:1.6;}
+  .note-textarea:focus{outline:none;}
+  @keyframes slidein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .note-enter{animation:slidein .2s ease;}
+</style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex overflow-hidden">
+
+<!-- Sidebar -->
+<aside class="flex flex-col h-screen w-56 py-8 px-4 bg-surface-container-low shrink-0 sticky top-0">
+  <div class="px-2 mb-10">
+    <div class="flex items-center gap-2 mb-1">
+      <div class="w-7 h-7 rounded-lg bg-primary-container flex items-center justify-center">
+        <span class="material-symbols-outlined text-white" style="font-size:14px">bolt</span>
+      </div>
+      <span class="font-bold text-sm tracking-tight text-on-surface font-headline">Decision Jam</span>
+    </div>
+    <p class="text-[10px] text-on-surface-variant/60 ml-9">Sprint Board</p>
+  </div>
+  <nav class="flex-1 space-y-1 text-sm font-medium font-headline">
+    <button onclick="gotoPhase('collect')" id="nav-collect" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">sticky_note_2</span> Collect
+    </button>
+    <button onclick="gotoPhase('cluster')" id="nav-cluster" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">hub</span> Cluster
+    </button>
+    <button onclick="gotoPhase('vote')" id="nav-vote" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">how_to_vote</span> Vote
+    </button>
+    <button onclick="gotoPhase('output')" id="nav-output" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left">
+      <span class="material-symbols-outlined text-base">summarize</span> Output
+    </button>
+  </nav>
+  <div class="mt-auto px-2 space-y-3">
+    <div class="text-[10px] text-on-surface-variant/50 uppercase tracking-widest font-bold">Session</div>
+    <div class="font-mono text-lg font-bold tracking-[.15em] text-on-surface bg-surface-container rounded-lg px-3 py-2 cursor-pointer hover:bg-surface-container-high transition-colors" id="code-display" onclick="copyCode()">——</div>
+    <p class="text-[10px] text-on-surface-variant/40">Click to copy</p>
+    <a href="prep.html" class="flex items-center gap-2 text-xs text-primary font-semibold hover:underline mt-2">
+      <span class="material-symbols-outlined text-sm">open_in_new</span> Prep form
+    </a>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="flex-1 flex flex-col min-w-0 relative overflow-hidden">
+
+  <!-- Top bar -->
+  <header class="flex justify-between items-center px-8 h-16 sticky top-0 z-40 bg-[#faf9f5]/80 backdrop-blur-xl shrink-0">
+    <div>
+      <h2 class="text-base font-black text-on-surface font-headline" id="hdr-title">Sprint Board</h2>
+      <p class="text-xs text-on-surface-variant" id="hdr-sub">Set up a session to start</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5 text-xs text-on-surface-variant bg-surface-container-low rounded-full px-3 py-1.5">
+        <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+        <span id="note-count">0 notes</span>
+      </div>
+      <button onclick="exportTxt()" class="text-xs font-semibold text-on-surface-variant border border-outline-variant/40 rounded-full px-4 py-1.5 hover:bg-surface-container-low transition-colors">Export</button>
+      <button onclick="gotoPhase('output')" class="text-xs font-bold bg-gradient-to-br from-primary to-primary-container text-white rounded-full px-5 py-2 shadow-md shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">rocket_launch</span> Next step
+      </button>
+    </div>
+  </header>
+
+  <!-- COLLECT -->
+  <div class="view active flex-1 p-8 overflow-auto" id="view-collect">
+    <!-- Import banner -->
+    <div id="import-banner" class="hidden mb-6 bg-on-surface rounded-xl flex items-center gap-4 px-6 py-4 flex-wrap">
+      <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-white text-base">download</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-white font-bold text-sm" id="import-count">Prep responses ready</p>
+        <p class="text-white/50 text-xs truncate" id="import-names"></p>
+      </div>
+      <button onclick="importPrep()" class="bg-[#fef08a] text-yellow-900 font-bold text-sm rounded-full px-5 py-2 hover:bg-yellow-200 active:scale-95 transition-all shrink-0">
+        Import as notes →
+      </button>
+      <button onclick="document.getElementById('import-banner').classList.add('hidden')" class="text-white/40 hover:text-white text-xl leading-none">×</button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6 max-w-4xl">
+      <!-- Forward col -->
+      <div>
+        <div class="flex items-center gap-2 mb-4 px-1">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <h3 class="font-headline font-bold text-sm text-on-surface">Moving forward</h3>
+          <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="fwd-count">0</span>
+        </div>
+        <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48" id="fwd-col">
+          <button onclick="addNote('fwd')" class="w-full py-4 border-2 border-dashed border-outline-variant/40 rounded-xl flex items-center justify-center gap-2 text-outline text-sm hover:border-primary/40 hover:text-primary transition-all">
+            <span class="material-symbols-outlined">add_circle</span> Add note
+          </button>
+        </div>
+      </div>
+      <!-- Back col -->
+      <div>
+        <div class="flex items-center gap-2 mb-4 px-1">
+          <span class="w-2 h-2 rounded-full bg-primary"></span>
+          <h3 class="font-headline font-bold text-sm text-on-surface">Holding us back</h3>
+          <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="back-count">0</span>
+        </div>
+        <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48" id="back-col">
+          <button onclick="addNote('back')" class="w-full py-4 border-2 border-dashed border-outline-variant/40 rounded-xl flex items-center justify-center gap-2 text-outline text-sm hover:border-primary/40 hover:text-primary transition-all">
+            <span class="material-symbols-outlined">add_circle</span> Add note
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sim panel -->
+    <div class="mt-8 max-w-md">
+      <p class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-3">Simulate participant input</p>
+      <div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+        <div class="flex gap-3 mb-3">
+          <input type="text" id="sim-name" placeholder="Name" class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-3 py-2 text-sm"/>
+          <select id="sim-col" class="bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-3 py-2 text-sm text-on-surface-variant">
+            <option value="back">Holding back</option>
+            <option value="fwd">Moving forward</option>
+          </select>
+        </div>
+        <textarea id="sim-body" placeholder="Type a note…" rows="2" class="w-full bg-[#fef9c3] border border-[#fde047]/60 rounded-lg px-3 py-2.5 text-sm text-yellow-900 resize-none mb-3"></textarea>
+        <button onclick="simAdd()" class="w-full py-2 bg-on-surface text-white rounded-full text-sm font-bold hover:opacity-80 active:scale-95 transition-all">Add note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLUSTER -->
+  <div class="view flex-1 p-8 overflow-auto" id="view-cluster">
+    <div class="max-w-5xl">
+      <!-- Theme builder -->
+      <div class="bg-surface-container-lowest rounded-xl p-6 mb-6 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="material-symbols-outlined text-primary">category</span>
+          <h3 class="font-headline font-bold">Themes</h3>
+          <span class="text-xs text-on-surface-variant ml-auto">Assign each note to a theme</span>
+        </div>
+        <div class="flex flex-wrap gap-2 mb-4" id="theme-chips"></div>
+        <div class="flex gap-3">
+          <input type="text" id="new-theme" placeholder="New theme label…" class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm"/>
+          <div class="flex gap-1.5 items-center" id="color-swatches"></div>
+          <button onclick="addTheme()" class="px-5 py-2 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm">add</span> Add
+          </button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <div class="flex items-center gap-2 mb-3 px-1">
+            <h3 class="font-headline font-bold text-sm">Unassigned</h3>
+            <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="unassigned-ct"></span>
+          </div>
+          <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48 max-h-[60vh] overflow-y-auto" id="unassigned-col"></div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 mb-3 px-1">
+            <h3 class="font-headline font-bold text-sm">Assigned</h3>
+            <span class="ml-auto text-[10px] font-bold text-on-surface-variant bg-surface-container-high px-2 py-0.5 rounded-full" id="assigned-ct"></span>
+          </div>
+          <div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-3 min-h-48 max-h-[60vh] overflow-y-auto" id="assigned-col"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOTE -->
+  <div class="view flex-1 p-8 overflow-auto" id="view-vote">
+    <div class="max-w-2xl">
+      <div class="bg-surface-container-lowest rounded-xl p-5 mb-6 flex items-center gap-6 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+        <div>
+          <div class="text-[10px] font-bold tracking-widest uppercase text-on-surface-variant mb-1">Votes remaining</div>
+          <div class="text-3xl font-extrabold font-headline text-on-surface" id="votes-left">3</div>
+        </div>
+        <div class="flex-1"></div>
+        <button onclick="gotoPhase('output')" class="py-2.5 px-6 bg-gradient-to-br from-primary to-primary-container text-white rounded-full text-sm font-bold shadow-md shadow-primary/20 hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5">
+          Close voting <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </button>
+      </div>
+      <div class="flex flex-col gap-3" id="vote-list"></div>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="view flex-1 p-8 overflow-auto" id="view-output">
+    <div class="max-w-3xl">
+      <div class="mb-8">
+        <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-primary bg-primary-fixed px-2 py-1 rounded-full mb-4 inline-block">Output</span>
+        <h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2" id="out-title">Session Output</h1>
+        <p class="text-on-surface-variant text-sm" id="out-meta"></p>
+      </div>
+      <div id="themes-out" class="space-y-6 mb-8"></div>
+      <!-- Next steps -->
+      <div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+        <h3 class="font-headline font-bold text-lg mb-6 flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">task_alt</span> Next steps
+        </h3>
+        <div class="space-y-3" id="ns-list">
+          <div class="flex gap-3 items-center">
+            <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">1</div>
+            <input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>
+          </div>
+          <div class="flex gap-3 items-center">
+            <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">2</div>
+            <input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>
+          </div>
+          <div class="flex gap-3 items-center">
+            <div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">3</div>
+            <input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>
+          </div>
+        </div>
+        <button onclick="addNS()" class="mt-4 text-primary text-sm font-semibold hover:underline flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">add</span> Add step
+        </button>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button onclick="exportTxt()" class="py-2.5 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">download</span> Export text
+        </button>
+        <button onclick="window.print()" class="py-2.5 px-6 border border-outline-variant/40 rounded-full text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">print</span> Print / PDF
+        </button>
+        <button onclick="resetAll()" class="py-2.5 px-6 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors ml-auto">
+          New session
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom utility bar (sprint board phase only) -->
+  <div id="bottom-bar" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-xl p-1.5 rounded-full border border-outline-variant/20 shadow-2xl z-50">
+    <div class="flex items-center px-4 py-2 gap-2 border-r border-outline-variant/20">
+      <span class="material-symbols-outlined text-primary text-sm">timer</span>
+      <span class="text-sm font-bold font-headline tabular-nums" id="timer-display">00:00</span>
+      <button onclick="toggleTimer()" id="timer-btn" class="ml-1 text-[10px] text-primary font-bold hover:underline">start</button>
+    </div>
+    <button onclick="gotoPhase('collect')" class="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Collect</button>
+    <button onclick="gotoPhase('cluster')" class="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Cluster</button>
+    <button onclick="gotoPhase('vote')" class="px-4 py-2 text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded-full transition-all">Vote</button>
+    <div class="h-5 w-px bg-outline-variant/20 mx-1"></div>
+    <button onclick="gotoPhase('output')" class="px-4 py-2 bg-primary-fixed text-on-primary-fixed-variant rounded-full text-xs font-bold hover:bg-primary hover:text-white transition-all flex items-center gap-1">
+      <span class="material-symbols-outlined text-sm">present_to_all</span> Output
+    </button>
+  </div>
+
+</main>
+
+<!-- Toast -->
+<div id="toast" class="fixed bottom-6 right-6 translate-y-20 opacity-0 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none"></div>
+
+<script>
+let session = { title:'', challenge:'', facilitator:'', code:'', responses:[], themes:[], votes:{}, maxVotes:3 };
+let selColor = 0;
+let timerSecs = 0, timerRunning = false, timerInterval = null;
+
+const THEME_COLORS = [
+  {bg:'#EDE9FE',border:'#A78BFA',text:'#4C1D95',dot:'#7C3AED'},
+  {bg:'#D1FAE5',border:'#6EE7B7',text:'#064E3B',dot:'#059669'},
+  {bg:'#FEF3C7',border:'#FCD34D',text:'#78350F',dot:'#D97706'},
+  {bg:'#FCE7F3',border:'#F9A8D4',text:'#831843',dot:'#DB2777'},
+  {bg:'#DBEAFE',border:'#93C5FD',text:'#1E3A8A',dot:'#2563EB'},
+  {bg:'#FEE2E2',border:'#FCA5A5',text:'#7F1D1D',dot:'#DC2626'},
+];
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'fixed bottom-6 right-6 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none translate-y-0 opacity-100';
+  setTimeout(() => { t.className = 'fixed bottom-6 right-6 transition-all duration-300 bg-on-surface text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl z-50 pointer-events-none translate-y-20 opacity-0'; }, 2500);
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function gotoPhase(p) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-'+p).classList.add('active');
+  document.querySelectorAll('nav button[id^="nav-"]').forEach(b => {
+    b.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface/60 hover:bg-surface-container transition-colors text-left';
+  });
+  const nb = document.getElementById('nav-'+p);
+  if (nb) nb.className = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-lowest text-primary font-semibold shadow-sm text-left';
+  if (p === 'cluster') renderCluster();
+  if (p === 'vote') renderVote();
+  if (p === 'output') renderOutput();
+  const bb = document.getElementById('bottom-bar');
+  if (bb) bb.style.display = (p === 'output') ? 'none' : 'flex';
+}
+
+// Timer
+function toggleTimer() {
+  const btn = document.getElementById('timer-btn');
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    btn.textContent = 'start';
+  } else {
+    timerInterval = setInterval(() => {
+      timerSecs++;
+      const m = String(Math.floor(timerSecs/60)).padStart(2,'0');
+      const s = String(timerSecs%60).padStart(2,'0');
+      document.getElementById('timer-display').textContent = m+':'+s;
+    }, 1000);
+    timerRunning = true;
+    btn.textContent = 'stop';
+  }
+}
+
+// Notes
+function addNote(col, body, author) {
+  const r = { id: Date.now()+Math.random(), body: body||'', author: author||'', col, themeId: null, highlighted: false };
+  session.responses.push(r);
+  renderNoteInCol(r);
+  updateCounts();
+}
+
+function renderNoteInCol(r) {
+  const col = document.getElementById(r.col+'-col');
+  const addBtn = col.querySelector('button');
+  const div = document.createElement('div');
+  div.id = 'note-'+r.id;
+  div.className = 'note-enter bg-surface-container-lowest rounded-xl p-4 shadow-[0px_4px_16px_rgba(27,28,26,0.05)] border border-transparent hover:border-primary/20 transition-all';
+  div.innerHTML = `
+    <textarea class="note-textarea text-on-surface" rows="2" placeholder="Type your note…" onchange="updateNote('${r.id}', this.value)">${esc(r.body)}</textarea>
+    <div class="flex items-center gap-2 mt-2">
+      ${r.author ? `<span class="text-[10px] text-on-surface-variant/60 font-medium">${esc(r.author)}</span>` : ''}
+      <button onclick="deleteNote('${r.id}')" class="ml-auto text-on-surface-variant/30 hover:text-error transition-colors">
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>
+    </div>`;
+  col.insertBefore(div, addBtn);
+  const ta = div.querySelector('textarea');
+  if (!r.body) setTimeout(() => ta.focus(), 50);
+}
+
+function updateNote(id, val) {
+  const r = session.responses.find(x => x.id == id);
+  if (r) r.body = val;
+  updateCounts();
+}
+
+function deleteNote(id) {
+  session.responses = session.responses.filter(x => x.id != id);
+  const el = document.getElementById('note-'+id);
+  if (el) el.remove();
+  updateCounts();
+}
+
+function updateCounts() {
+  const fwd = session.responses.filter(r => r.col === 'fwd').length;
+  const back = session.responses.filter(r => r.col === 'back').length;
+  document.getElementById('fwd-count').textContent = fwd;
+  document.getElementById('back-count').textContent = back;
+  document.getElementById('note-count').textContent = (fwd+back) + ' notes';
+}
+
+function simAdd() {
+  const body = document.getElementById('sim-body').value.trim();
+  const name = document.getElementById('sim-name').value.trim() || 'Participant';
+  const col = document.getElementById('sim-col').value;
+  if (!body) { toast('Write something first'); return; }
+  addNote(col, body, name);
+  document.getElementById('sim-body').value = '';
+  toast('Note added by ' + name);
+}
+
+// Themes
+function renderSwatches() {
+  const c = document.getElementById('color-swatches');
+  c.innerHTML = THEME_COLORS.map((col, i) =>
+    `<div onclick="selColor=${i};renderSwatches()" class="w-5 h-5 rounded-full cursor-pointer transition-all ${i===selColor?'ring-2 ring-offset-1 ring-on-surface scale-110':''}" style="background:${col.bg};border:1.5px solid ${col.border}"></div>`
+  ).join('');
+}
+
+function addTheme() {
+  const label = document.getElementById('new-theme').value.trim();
+  if (!label) { toast('Enter a theme name'); return; }
+  const color = THEME_COLORS[selColor % THEME_COLORS.length];
+  session.themes.push({ id: Date.now(), label, color });
+  document.getElementById('new-theme').value = '';
+  selColor = (selColor + 1) % THEME_COLORS.length;
+  renderSwatches();
+  renderThemeChips();
+  renderCluster();
+  toast('Theme added: ' + label);
+}
+
+function renderThemeChips() {
+  const el = document.getElementById('theme-chips');
+  if (!session.themes.length) { el.innerHTML = '<span class="text-xs text-on-surface-variant/50">No themes yet</span>'; return; }
+  el.innerHTML = session.themes.map(t =>
+    `<div class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full" style="background:${t.color.bg};color:${t.color.text};border:1px solid ${t.color.border}">
+      <span class="w-1.5 h-1.5 rounded-full" style="background:${t.color.dot}"></span>
+      ${esc(t.label)}
+    </div>`
+  ).join('');
+}
+
+function renderCluster() {
+  renderSwatches();
+  renderThemeChips();
+  const unassigned = session.responses.filter(r => !r.themeId && r.body.trim());
+  const assigned = session.responses.filter(r => r.themeId && r.body.trim());
+  document.getElementById('unassigned-ct').textContent = unassigned.length + ' left';
+  document.getElementById('assigned-ct').textContent = assigned.length + ' done';
+  const opts = session.themes.length
+    ? '<option value="">— unassigned —</option>' + session.themes.map(t => `<option value="${t.id}">${t.label}</option>`).join('')
+    : '<option value="">Add themes above first</option>';
+  document.getElementById('unassigned-col').innerHTML = unassigned.length
+    ? unassigned.map(r => clusterCard(r, opts)).join('')
+    : '<div class="text-center py-8 text-on-surface-variant/40 text-sm">All notes assigned!</div>';
+  document.getElementById('assigned-col').innerHTML = assigned.length
+    ? assigned.map(r => { const t = session.themes.find(x => x.id == r.themeId); return clusterCard(r, opts, t); }).join('')
+    : '<div class="text-center py-8 text-on-surface-variant/40 text-sm">Assign notes from the left</div>';
+}
+
+function clusterCard(r, opts, theme) {
+  const borderStyle = theme ? `border-l-4;border-color:${theme.color.dot}` : '';
+  return `<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0px_4px_16px_rgba(27,28,26,0.04)] ${theme ? 'border-l-4' : ''}" ${theme ? `style="border-color:${theme.color.dot}"` : ''}>
+    <p class="text-sm text-on-surface leading-relaxed mb-3">${esc(r.body)}</p>
+    <div class="flex items-center gap-2">
+      ${r.author ? `<span class="text-[10px] text-on-surface-variant/50">${esc(r.author)}</span>` : ''}
+      <select onchange="assignTheme('${r.id}',this.value)" class="ml-auto bg-surface-container-low text-xs text-on-surface-variant border-none rounded-full px-3 py-1 cursor-pointer">
+        ${opts.replace(`value="${r.themeId||''}"`,`value="${r.themeId||''}" selected`)}
+      </select>
+      <button onclick="toggleHL('${r.id}')" class="text-on-surface-variant/40 hover:text-amber-500 transition-colors">
+        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' ${r.highlighted?1:0}">star</span>
+      </button>
+    </div>
+  </div>`;
+}
+
+function assignTheme(id, themeId) {
+  const r = session.responses.find(x => x.id == id);
+  if (r) { r.themeId = themeId ? parseInt(themeId) : null; renderCluster(); }
+}
+
+function toggleHL(id) {
+  const r = session.responses.find(x => x.id == id);
+  if (r) { r.highlighted = !r.highlighted; renderCluster(); }
+}
+
+// Vote
+function renderVote() {
+  const used = Object.keys(session.votes).length;
+  const left = session.maxVotes - used;
+  document.getElementById('votes-left').textContent = left < 0 ? 0 : left;
+  const sorted = session.responses.filter(r => r.body.trim()).sort((a,b) => countVotes(b.id) - countVotes(a.id));
+  document.getElementById('vote-list').innerHTML = sorted.map(r => {
+    const t = session.themes.find(x => x.id == r.themeId);
+    const vc = countVotes(r.id);
+    const myVote = session.votes[r.id];
+    const canVote = !myVote && left > 0;
+    return `<div class="bg-surface-container-lowest rounded-xl p-5 flex gap-4 items-start shadow-[0px_4px_16px_rgba(27,28,26,0.04)] ${myVote?'border border-primary/30':''}">
+      <button onclick="castVote('${r.id}')" ${!canVote&&!myVote?'disabled':''} class="w-10 h-10 rounded-full border-2 flex items-center justify-center font-bold text-sm transition-all shrink-0 ${myVote?'bg-primary border-primary text-white':'border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary'} ${!canVote&&!myVote?'opacity-30 cursor-not-allowed':'cursor-pointer'}">
+        ${myVote?'✓':'+'}
+      </button>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm text-on-surface leading-relaxed mb-2">${esc(r.body)}</p>
+        <div class="flex items-center gap-2 flex-wrap">
+          ${r.author ? `<span class="text-[10px] text-on-surface-variant/50">${esc(r.author)}</span>` : ''}
+          ${t ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:${t.color.bg};color:${t.color.text}">${esc(t.label)}</span>` : ''}
+        </div>
+      </div>
+      <div class="text-lg font-extrabold font-headline text-on-surface/30 shrink-0 pt-1">${vc||''}</div>
+    </div>`;
+  }).join('');
+}
+
+function countVotes(id) { return Object.values(session.votes).filter(v => v == id).length; }
+
+function castVote(id) {
+  if (session.votes[id]) { delete session.votes[id]; }
+  else {
+    const used = Object.keys(session.votes).length;
+    if (used >= session.maxVotes) { toast('No votes left'); return; }
+    session.votes['v_'+id+'_'+Date.now()] = id;
+  }
+  renderVote();
+}
+
+// Output
+function renderOutput() {
+  document.getElementById('out-title').textContent = session.title || 'Session Output';
+  document.getElementById('out-meta').textContent =
+    new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) +
+    (session.facilitator ? ' · ' + session.facilitator : '') +
+    ' · ' + session.responses.filter(r=>r.body.trim()).length + ' notes';
+  const voteCounts = {};
+  session.responses.forEach(r => { voteCounts[r.id] = countVotes(r.id); });
+  let html = '';
+  const usedThemes = session.themes.filter(t => session.responses.some(r => r.themeId == t.id && r.body.trim()));
+  usedThemes.forEach(t => {
+    const notes = session.responses.filter(r => r.themeId == t.id && r.body.trim())
+      .sort((a,b) => (voteCounts[b.id]||0)-(voteCounts[a.id]||0));
+    const totalVotes = notes.reduce((s,r)=>s+(voteCounts[r.id]||0),0);
+    html += `<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+      <div class="px-6 py-4 flex items-center gap-3" style="background:${t.color.bg}">
+        <span class="w-3 h-3 rounded-full" style="background:${t.color.dot}"></span>
+        <span class="font-headline font-bold text-base" style="color:${t.color.text}">${esc(t.label)}</span>
+        <span class="ml-auto text-xs font-bold" style="color:${t.color.text};opacity:.6">${notes.length} notes · ${totalVotes} votes</span>
+      </div>
+      <div class="divide-y divide-outline-variant/10">
+        ${notes.map((r,i) => `<div class="flex gap-4 items-start px-6 py-4 ${i===0&&(voteCounts[r.id]||0)>0?'bg-primary-fixed/20':''}">
+          <div class="w-6 text-right font-mono text-xs font-bold text-on-surface-variant/40 pt-0.5 shrink-0">${voteCounts[r.id]||''}</div>
+          <p class="text-sm text-on-surface leading-relaxed flex-1 ${i===0&&(voteCounts[r.id]||0)>0?'font-semibold':''}">${esc(r.body)}</p>
+          ${r.highlighted ? '<span class="material-symbols-outlined text-amber-500 text-sm shrink-0" style="font-variation-settings:\'FILL\' 1">star</span>' : ''}
+          ${r.author ? `<span class="text-[10px] text-on-surface-variant/40 shrink-0">${esc(r.author)}</span>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  const unthemed = session.responses.filter(r => !r.themeId && r.body.trim()).sort((a,b)=>(voteCounts[b.id]||0)-(voteCounts[a.id]||0));
+  if (unthemed.length) {
+    html += `<div class="bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(27,28,26,0.04)]">
+      <div class="px-6 py-4 bg-surface-container-low"><span class="font-headline font-bold text-base text-on-surface-variant">Unclustered</span></div>
+      <div class="divide-y divide-outline-variant/10">
+        ${unthemed.map(r=>`<div class="flex gap-4 items-start px-6 py-4">
+          <div class="w-6 text-right font-mono text-xs font-bold text-on-surface-variant/40 pt-0.5 shrink-0">${voteCounts[r.id]||''}</div>
+          <p class="text-sm text-on-surface leading-relaxed flex-1">${esc(r.body)}</p>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+  if (!html) html = '<div class="text-center py-12 text-on-surface-variant/40">No notes yet — go collect some!</div>';
+  document.getElementById('themes-out').innerHTML = html;
+}
+
+function addNS() {
+  const list = document.getElementById('ns-list');
+  const n = list.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'flex gap-3 items-center';
+  div.innerHTML = `<div class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-[10px] font-bold text-on-surface-variant shrink-0">${n}</div><input class="flex-1 bg-surface-container-low border-b border-outline-variant/30 rounded-t-lg px-4 py-2.5 text-sm" placeholder="Add a next step…"/>`;
+  list.appendChild(div);
+}
+
+function exportTxt() {
+  const voteCounts = {};
+  session.responses.forEach(r => { voteCounts[r.id] = countVotes(r.id); });
+  let out = `DECISION JAM — ${session.title||'Session'}\n`;
+  out += `${new Date().toLocaleDateString()} · ${session.facilitator||''}\n\n`;
+  if (session.challenge) out += `Challenge: ${session.challenge}\n\n`;
+  session.themes.forEach(t => {
+    const notes = session.responses.filter(r=>r.themeId==t.id&&r.body.trim()).sort((a,b)=>(voteCounts[b.id]||0)-(voteCounts[a.id]||0));
+    out += `## ${t.label}\n`;
+    notes.forEach(r => out += `  [${voteCounts[r.id]||0}] ${r.body}${r.author?' ('+r.author+')':''}\n`);
+    out += '\n';
+  });
+  const ns = [...document.querySelectorAll('#ns-list input')].map(i=>i.value.trim()).filter(Boolean);
+  if (ns.length) { out += '## Next steps\n'; ns.forEach((s,i) => out += `  ${i+1}. ${s}\n`); }
+  const blob = new Blob([out],{type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (session.title||'session').replace(/\s+/g,'-').toLowerCase()+'-output.txt';
+  a.click();
+  toast('Exported!');
+}
+
+function copyCode() {
+  if (!session.code) return;
+  navigator.clipboard.writeText(session.code).catch(()=>{});
+  toast('Code copied: ' + session.code);
+}
+
+function resetAll() {
+  if (!confirm('Start a new session? All data will be cleared.')) return;
+  session = { title:'', challenge:'', facilitator:'', code:'', responses:[], themes:[], votes:{}, maxVotes:3 };
+  ['fwd-col','back-col'].forEach(id => {
+    const col = document.getElementById(id);
+    const btn = col.querySelector('button');
+    col.innerHTML = '';
+    col.appendChild(btn);
+  });
+  updateCounts();
+  document.getElementById('hdr-title').textContent = 'Sprint Board';
+  document.getElementById('hdr-sub').textContent = 'Set up a session to start';
+  document.getElementById('code-display').textContent = '——';
+  gotoPhase('collect');
+  toast('Session cleared');
+}
+
+// Import from prep
+function checkImport() {
+  const hash = location.hash;
+  if (!hash.startsWith('#import=')) return;
+  try {
+    const payload = JSON.parse(decodeURIComponent(escape(atob(hash.replace('#import=','')))));
+    if (!payload.responses?.length) return;
+    window._prep = payload;
+    const n = payload.responses.length;
+    document.getElementById('import-count').textContent = n + ' prep response' + (n!==1?'s':'') + ' ready to import';
+    document.getElementById('import-names').textContent = payload.responses.map(r=>r.name).filter(Boolean).join(', ');
+    document.getElementById('import-banner').classList.remove('hidden');
+    history.replaceState(null,'',location.pathname);
+  } catch(e) { console.warn('Import failed',e); }
+}
+
+function importPrep() {
+  const p = window._prep;
+  if (!p) return;
+  session.title = p.title || session.title;
+  session.challenge = p.challenge || session.challenge;
+  session.facilitator = p.facilitator || session.facilitator;
+  if (session.title) {
+    document.getElementById('hdr-title').textContent = session.title;
+    document.getElementById('hdr-sub').textContent = session.challenge || '';
+  }
+  p.responses.forEach(r => {
+    r.pains?.forEach(pain => { if (pain) addNote('back', pain, r.name + (r.role?' · '+r.role:'')); });
+    if (r.change) addNote('back', r.change, r.name + ' [change]');
+  });
+  document.getElementById('import-banner').classList.add('hidden');
+  toast('Imported ' + session.responses.length + ' notes');
+}
+
+// Init
+renderSwatches();
+checkImport();
+gotoPhase('collect');
+</script>
+</body>
+</html>
