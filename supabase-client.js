@@ -1,7 +1,7 @@
 // Decision Jam — Supabase client
 // Fill in your values from: Supabase dashboard → Settings → API
-const SUPABASE_URL  = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON = 'YOUR_NEW_ANON_KEY';
+const SUPABASE_URL  = 'https://rlsbzzlpgbhrytbxzxbn.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_0mbp8aRaV2rI2Z8lERoMhg_IOmcnWpF';
 
 const sb = {
   headers: {
