@@ -1,2 +1,7 @@
+# GitHub Pages / Jekyll config
+# Prevents Jekyll from processing or hiding any files
 include:
   - supabase-client.js
+
+# Disable Jekyll processing entirely — serve files as-is
+plugins: []
